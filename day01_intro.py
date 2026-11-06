@@ -5,6 +5,7 @@ target_user = "General Public"
 problem = "Understanding air pollution levels"
 
 print ("====== Project Card ======")
+
 print(f"Project Name : {project_name}")
 print(f"Product      : {product}")
 print(f"Target User  : {target_user}")
