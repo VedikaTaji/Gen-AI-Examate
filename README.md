@@ -11,12 +11,14 @@ AQIExplainer is a Python-based project designed to help users understand Air Qua
 - Monitoring station information.
 - Searchable AQI records.
 - City-wise air quality information.
+- Cleaned and organized AQI data in JSON format.
 
 ## 2. Product
 
 - An Air Quality Information and Explanation System.
 - Helps users access and understand city-wise air quality information.
 - Organizes AQI records for easy searching and analysis.
+- Processes raw AQI data into structured records.
 
 ## 3. Target Users
 
@@ -34,6 +36,7 @@ Air pollution is a major environmental concern. Although AQI information is avai
 - Make AQI data easier to understand.
 - Help users search for city-wise air quality information.
 - Improve awareness about environmental pollution.
+- Process and organize raw air quality data for further analysis.
 
 ## 5. Data Source
 
@@ -43,20 +46,30 @@ Air pollution is a major environmental concern. Although AQI information is avai
 - Website: https://cpcb.nic.in/
 - Data Type: Daily Air Quality Index (AQI) Bulletins.
 - Coverage: Different cities across Maharashtra.
-- Bulletin Date: 06 November 2025.
+- Bulletin Date: 06 November 2026.
 - Bulletin Time: 4 PM.
 - Dataset: 20 Maharashtra city AQI records.
 
-**Official Bulletin:**  
-https://cpcb.nic.in/upload/Downloads/AQI_Bulletin_20251106.pdf
+**Official Bulletin:**
+
+https://cpcb.nic.in/National-Air-Quality-Index/
+
+**Additional Raw Data:**
+- Raw pollutant measurement data downloaded from the Maharashtra Pollution Control Board (MPCB) source.
+- Includes pollutant measurements such as PM2.5, PM10, NO2, SO2 and CO.
+- Original downloaded files are stored in `data/raw/`.
 
 ## 6. Technologies Used
 
 - Python.
+- CSV and JSON.
+- Python Dataclasses.
+- Requests Library.
+- Exception Handling (try/except).
 - Git.
 - GitHub.
 - Visual Studio Code (VS Code).
-- Python Virtual Environment (.venv).
+- Python Virtual Environment.
 
 ## 7. Planned Features
 
@@ -67,6 +80,10 @@ https://cpcb.nic.in/upload/Downloads/AQI_Bulletin_20251106.pdf
 - Provide an interactive command-line interface.
 - Manage AQI records using reusable Python functions.
 - Organize AQI data using lists and dictionaries.
+- Clean and validate raw AQI data.
+- Store processed AQI records in JSON format.
+- Download AQI-related documents using Python requests.
+- Handle invalid data rows and download errors.
 
 ## 8. Project Structure
 
@@ -78,11 +95,22 @@ Gen-AI-Examate/
 ├── day01_menu.py
 │
 ├── data/
-│   └── sample_records.py
+│   ├── raw/
+│   │   ├── AQI_Bulletin_20261106.pdf
+│   │   ├── About_AQI.pdf
+│   │   ├── aqi_data.csv
+│   │   └── Raw_Data_2026_site_198_more_chowk_waluj_aurangabad_mpcb_1D.csv
+│   │
+│   ├── sample_records.py
+│   └── records.json
 │
 ├── app/
+│   ├── __init__.py
 │   ├── records.py
-│   └── cli.py
+│   ├── cli.py
+│   ├── models.py
+│   ├── ingest.py
+│   └── fetch.py
 │
 ├── requirements.txt
 └── .gitignore
@@ -91,7 +119,11 @@ Gen-AI-Examate/
 ## 9. Project Progress
 
 - **Day 1:** Project introduction and menu-based application using Python variables, f-strings, input(), while loops and conditional statements.
+
 - **Day 2:** Maharashtra AQI dataset creation with 20 city records, keyword searching, category counting, record retrieval and command-line interface development.
+
+- **Day 3:** Downloaded CPCB AQI bulletin and raw pollutant data. Created `app/ingest.py` for CSV reading, data cleaning, validation and exception handling. Generated structured AQI records in `data/records.json`. Created `app/models.py` using Python dataclasses and developed `app/fetch.py` for downloading documents using the requests library.
+
 - **GitHub:** Project version control and code management using Git and GitHub.
 
 ## 10. Author

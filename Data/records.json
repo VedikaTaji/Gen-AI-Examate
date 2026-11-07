@@ -1,0 +1,162 @@
+[
+    {
+        "city": "Ahmednagar",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 74,
+        "aqi_category": "Satisfactory",
+        "prominent_pollutant": "O3",
+        "stations_reporting": "1/1"
+    },
+    {
+        "city": "Akola",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 69,
+        "aqi_category": "Satisfactory",
+        "prominent_pollutant": "PM10",
+        "stations_reporting": "1/1"
+    },
+    {
+        "city": "Ambernath",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 95,
+        "aqi_category": "Satisfactory",
+        "prominent_pollutant": "PM10",
+        "stations_reporting": "1/1"
+    },
+    {
+        "city": "Amravati",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 96,
+        "aqi_category": "Satisfactory",
+        "prominent_pollutant": "PM10",
+        "stations_reporting": "2/2"
+    },
+    {
+        "city": "Aurangabad (Maharashtra)",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 91,
+        "aqi_category": "Satisfactory",
+        "prominent_pollutant": "O3, PM10, PM2.5",
+        "stations_reporting": "3/3"
+    },
+    {
+        "city": "Badlapur",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 87,
+        "aqi_category": "Satisfactory",
+        "prominent_pollutant": "PM2.5",
+        "stations_reporting": "1/1"
+    },
+    {
+        "city": "Beed",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 54,
+        "aqi_category": "Satisfactory",
+        "prominent_pollutant": "PM10",
+        "stations_reporting": "1/1"
+    },
+    {
+        "city": "Bhiwandi",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 126,
+        "aqi_category": "Moderate",
+        "prominent_pollutant": "PM10",
+        "stations_reporting": "1/1"
+    },
+    {
+        "city": "Boisar",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 69,
+        "aqi_category": "Satisfactory",
+        "prominent_pollutant": "PM10",
+        "stations_reporting": "1/1"
+    },
+    {
+        "city": "Chandrapur",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 134,
+        "aqi_category": "Moderate",
+        "prominent_pollutant": "PM10",
+        "stations_reporting": "2/2"
+    },
+    {
+        "city": "Dhule",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 128,
+        "aqi_category": "Moderate",
+        "prominent_pollutant": "PM10",
+        "stations_reporting": "1/1"
+    },
+    {
+        "city": "Dombivli",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 87,
+        "aqi_category": "Satisfactory",
+        "prominent_pollutant": "PM10",
+        "stations_reporting": "1/1"
+    },
+    {
+        "city": "Jalgaon",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 118,
+        "aqi_category": "Moderate",
+        "prominent_pollutant": "PM10",
+        "stations_reporting": "1/1"
+    },
+    {
+        "city": "Kolhapur",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 81,
+        "aqi_category": "Satisfactory",
+        "prominent_pollutant": "PM2.5, PM10",
+        "stations_reporting": "2/2"
+    },
+    {
+        "city": "Latur",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 50,
+        "aqi_category": "Good",
+        "prominent_pollutant": "PM10",
+        "stations_reporting": "1/1"
+    },
+    {
+        "city": "Mumbai",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 102,
+        "aqi_category": "Moderate",
+        "prominent_pollutant": "PM10, PM2.5",
+        "stations_reporting": "24/26"
+    },
+    {
+        "city": "Nagpur",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 153,
+        "aqi_category": "Moderate",
+        "prominent_pollutant": "PM2.5",
+        "stations_reporting": "4/4"
+    },
+    {
+        "city": "Nashik",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 158,
+        "aqi_category": "Moderate",
+        "prominent_pollutant": "PM2.5, PM10",
+        "stations_reporting": "4/4"
+    },
+    {
+        "city": "Navi Mumbai",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 128,
+        "aqi_category": "Moderate",
+        "prominent_pollutant": "PM2.5, PM10",
+        "stations_reporting": "6/8"
+    },
+    {
+        "city": "Pune",
+        "bulletin_date": "2026-11-06",
+        "aqi_value": 134,
+        "aqi_category": "Moderate",
+        "prominent_pollutant": "PM2.5, PM10",
+        "stations_reporting": "7/9"
+    }
+]
