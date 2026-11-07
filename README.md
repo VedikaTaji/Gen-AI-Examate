@@ -130,3 +130,84 @@ Gen-AI-Examate/
 
 - **Name:** Vedika
 - **Project:** AQIExplainer
+
+## 11. How to Run the Project
+
+### Step 1: Clone the Repository
+
+```bash
+git clone YOUR_GITHUB_REPOSITORY_URL
+cd Gen-AI-Examate
+```
+
+### Step 2: Create a Virtual Environment
+
+```bash
+python -m venv .venv
+```
+
+Activate it on Windows PowerShell:
+
+```powershell
+.venv\Scripts\Activate.ps1
+```
+
+### Step 3: Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Step 4: Run the AQI Data Analysis
+
+```bash
+python -m analysis.explore
+```
+
+### Step 5: Start the FastAPI Server
+
+```bash
+uvicorn app.main:app --reload
+```
+
+### Step 6: Open API Documentation
+
+Open the following URL in your browser:
+
+http://127.0.0.1:8000/docs
+
+### Available API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/health` | Check API health |
+| GET | `/records?limit=20` | Retrieve AQI records |
+| GET | `/records/{id}` | Retrieve a record by ID |
+| GET | `/search?q=Pune` | Search AQI records |
+| POST | `/questions` | Ask AQI-related questions |
+
+## 12. Day 4 – API Development and Smart Search
+
+### S1: FastAPI Service
+- Created a FastAPI application in `app/main.py`.
+- Implemented the health-check endpoint.
+- Added an endpoint to retrieve AQI records with a limit parameter.
+- Implemented record retrieval by ID with HTTP 404 handling.
+- Added an AQI search endpoint.
+- Created a POST endpoint for AQI-related questions.
+
+### S2: Data Analysis and Smart Search
+- Created `analysis/explore.py` using pandas.
+- Generated three facts from AQI records.
+- Implemented TF-IDF vectorization in `app/smart_search.py`.
+- Used cosine similarity to rank matching AQI records.
+- Integrated smart search with the FastAPI search endpoint.
+
+### Concepts Learned
+- FastAPI
+- REST API
+- HTTP methods and status codes
+- Pandas
+- TF-IDF
+- Cosine similarity
+- API testing using Swagger UI
