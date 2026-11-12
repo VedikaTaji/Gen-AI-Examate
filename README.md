@@ -88,11 +88,23 @@ https://cpcb.nic.in/National-Air-Quality-Index/
 ## 8. Project Structure
 
 ```text
+## 8. Project Structure
+
+```text
 Gen-AI-Examate/
 │
 ├── README.md
 ├── day01_intro.py
 ├── day01_menu.py
+├── requirements.txt
+├── .gitignore
+│
+├── docs/
+│   ├── how_llms_work.md
+│   └── user_questions.md
+│
+├── analysis/
+│   └── explore.py
 │
 ├── data/
 │   ├── raw/
@@ -104,25 +116,30 @@ Gen-AI-Examate/
 │   ├── sample_records.py
 │   └── records.json
 │
-├── app/
-│   ├── __init__.py
-│   ├── records.py
-│   ├── cli.py
-│   ├── models.py
-│   ├── ingest.py
-│   └── fetch.py
-│
-├── requirements.txt
-└── .gitignore
+└── app/
+    ├── __init__.py
+    ├── records.py
+    ├── cli.py
+    ├── models.py
+    ├── ingest.py
+    ├── fetch.py
+    ├── main.py
+    └── smart_search.py
 ```
 
 ## 9. Project Progress
+
+- ## 9. Project Progress
 
 - **Day 1:** Project introduction and menu-based application using Python variables, f-strings, input(), while loops and conditional statements.
 
 - **Day 2:** Maharashtra AQI dataset creation with 20 city records, keyword searching, category counting, record retrieval and command-line interface development.
 
 - **Day 3:** Downloaded CPCB AQI bulletin and raw pollutant data. Created `app/ingest.py` for CSV reading, data cleaning, validation and exception handling. Generated structured AQI records in `data/records.json`. Created `app/models.py` using Python dataclasses and developed `app/fetch.py` for downloading documents using the requests library.
+
+- **Day 4:** Developed a FastAPI application with five API endpoints. Implemented AQI data retrieval, health checking, record lookup, question answering and smart search using TF-IDF vectorization and cosine similarity. Created `analysis/explore.py` using pandas to generate three facts about the AQI dataset.
+
+- **Day 5:** Created `docs/how_llms_work.md` explaining LLM fundamentals, tokenization, embeddings, Transformer architecture, self-attention and next-token prediction with a workflow diagram. Created `docs/user_questions.md` containing 10 realistic AQIExplainer user questions and identified questions that cannot be answered using the current dataset. Tested FastAPI endpoints using Swagger UI and completed Checkpoint 1.
 
 - **GitHub:** Project version control and code management using Git and GitHub.
 
@@ -211,3 +228,43 @@ http://127.0.0.1:8000/docs
 - TF-IDF
 - Cosine similarity
 - API testing using Swagger UI
+
+## 13. Day 5 – LLM Fundamentals and Documentation
+
+### S1: Understanding Large Language Models
+- Studied the fundamentals of Large Language Models (LLMs).
+- Learned how tokenization converts text into smaller tokens.
+- Understood embeddings and numerical representations of text.
+- Studied the Transformer architecture.
+- Learned about the self-attention mechanism.
+- Understood next-token prediction and response generation.
+- Created `docs/how_llms_work.md` with a workflow diagram explaining how LLMs work.
+
+### S2: AQIExplainer User Questions
+- Created `docs/user_questions.md`.
+- Added 10 realistic questions based on AQIExplainer functionality.
+- Identified questions that can be answered using the current dataset.
+- Identified questions that cannot be answered because of missing information.
+- Included a historical AQI question that requires 30 days of data, which is not currently available.
+
+### Checkpoint 1
+- Successfully ran the FastAPI application.
+- Verified API endpoints using Swagger UI at `/docs`.
+- Tested AQI record retrieval, search and question-answering functionality.
+- Explained the `search_records()` function.
+- Created the Git checkpoint `checkpoint-1`.
+
+### Concepts Learned
+- Large Language Models (LLMs)
+- Tokenization
+- Embeddings
+- Transformer Architecture
+- Self-Attention
+- Next-Token Prediction
+- FastAPI and Swagger UI
+- API Testing
+- Dataset Limitations
+- Git Checkpoint Tagging
+
+### Current AI Implementation
+AQIExplainer currently uses TF-IDF vectorization and cosine similarity for smart search, along with rule-based logic for question answering. LLM integration is planned as a possible future enhancement.
