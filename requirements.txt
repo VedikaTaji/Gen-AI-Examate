@@ -1,8 +1,9 @@
 # AQIExplainer dependencies
 # Currently uses Python standard library only.
+
 requests
 fastapi
 uvicorn
 pandas
 scikit-learn
-requests
+python-dotenv

@@ -2,6 +2,7 @@
 import json
 from pathlib import Path
 from typing import Optional
+from app.llm import generate_aqi_response
 
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
@@ -43,6 +44,10 @@ search_engine = SmartSearch(records)
 
 class QuestionRequest(BaseModel):
     question: str
+
+class ChatRequest(BaseModel):
+    question: str
+    prompt_version: str = "v2"
 
 
 @app.get("/health")
@@ -137,3 +142,35 @@ def ask_question(request: QuestionRequest):
         "question": request.question,
         "answer": answer
     }
+
+@app.post("/chat")
+def chat(request: ChatRequest):
+
+    question = request.question.strip()
+
+    if not question:
+        raise HTTPException(
+            status_code=400,
+            detail="Question cannot be empty."
+        )
+
+    try:
+        result = generate_aqi_response(
+            question=question,
+            records=records,
+            prompt_version=request.prompt_version
+        )
+
+        return result
+
+    except ValueError as error:
+        raise HTTPException(
+            status_code=400,
+            detail=str(error)
+        )
+
+    except RuntimeError as error:
+        raise HTTPException(
+            status_code=502,
+            detail=str(error)
+        )
