@@ -3,6 +3,7 @@ import json
 from pathlib import Path
 from typing import Optional
 from app.llm import generate_aqi_response
+from app.vectorstore import search_chunks
 
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
@@ -173,4 +174,44 @@ def chat(request: ChatRequest):
         raise HTTPException(
             status_code=502,
             detail=str(error)
+        )
+
+    
+@app.get("/search/semantic")
+def semantic_search_endpoint(q: str, limit: int = 5):
+    """Search AQI documents using semantic similarity."""
+
+    question = q.strip()
+
+    if not question:
+        raise HTTPException(
+            status_code=400,
+            detail="Search question cannot be empty."
+        )
+
+    if limit < 1 or limit > 20:
+        raise HTTPException(
+            status_code=400,
+            detail="Limit must be between 1 and 20."
+        )
+
+    try:
+        results = search_chunks(question, top_k=limit)
+
+        return {
+            "query": question,
+            "total_results": len(results),
+            "results": results
+        }
+
+    except ValueError as error:
+        raise HTTPException(
+            status_code=400,
+            detail=str(error)
+        )
+
+    except Exception as error:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Semantic search failed: {error}"
         )
