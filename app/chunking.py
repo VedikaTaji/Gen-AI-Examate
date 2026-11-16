@@ -21,8 +21,11 @@ def split_text(text, chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
     if not text:
         return []
 
-    if overlap >= chunk_size:
-        raise ValueError("Overlap must be smaller than chunk size.")
+    if chunk_size <= 0:
+        raise ValueError("Chunk size must be greater than zero.")
+
+    if overlap < 0 or overlap >= chunk_size:
+        raise ValueError("Overlap must be non-negative and smaller than chunk size.")
 
     chunks = []
     start = 0
@@ -48,11 +51,14 @@ def split_text(text, chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
     return chunks
 
 
-def make_chunks(text, source, title, page):
+def make_chunks(text, source, title, page,
+                chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
     """Create chunk dictionaries with source metadata."""
     output = []
 
-    for index, chunk_text in enumerate(split_text(text)):
+    for index, chunk_text in enumerate(
+        split_text(text, chunk_size=chunk_size, overlap=overlap)
+    ):
         unique_text = f"{source}|{page}|{index}|{chunk_text}"
         chunk_id = hashlib.sha256(
             unique_text.encode("utf-8")
@@ -72,7 +78,7 @@ def make_chunks(text, source, title, page):
     return output
 
 
-def load_pdf(path):
+def load_pdf(path, chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
     """Extract text page by page from a PDF."""
     output = []
     reader = PdfReader(str(path))
@@ -86,14 +92,16 @@ def load_pdf(path):
                 text=text,
                 source=path.relative_to(BASE_DIR),
                 title=title,
-                page=page_number
+                page=page_number,
+                chunk_size=chunk_size,
+                overlap=overlap
             )
         )
 
     return output
 
 
-def load_csv(path):
+def load_csv(path, chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
     """Convert each CSV row into searchable text."""
     output = []
     title = path.stem.replace("_", " ")
@@ -113,14 +121,16 @@ def load_csv(path):
                     text=text,
                     source=path.relative_to(BASE_DIR),
                     title=title,
-                    page=f"row-{row_number}"
+                    page=f"row-{row_number}",
+                    chunk_size=chunk_size,
+                    overlap=overlap
                 )
             )
 
     return output
 
 
-def load_json(path):
+def load_json(path, chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
     """Convert JSON records into searchable text."""
     output = []
     title = path.stem.replace("_", " ")
@@ -141,19 +151,27 @@ def load_json(path):
                 text=text,
                 source=path.relative_to(BASE_DIR),
                 title=title,
-                page=f"record-{record_number}"
+                page=f"record-{record_number}",
+                chunk_size=chunk_size,
+                overlap=overlap
             )
         )
 
     return output
 
 
-def load_all_chunks():
+def load_all_chunks(chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
     """Load and chunk supported documents from the data folder."""
     all_chunks = []
 
     if not DATA_DIR.exists():
         raise FileNotFoundError(f"Data folder not found: {DATA_DIR}")
+
+    if chunk_size <= 0:
+        raise ValueError("Chunk size must be greater than zero.")
+
+    if overlap < 0 or overlap >= chunk_size:
+        raise ValueError("Overlap must be non-negative and smaller than chunk size.")
 
     for path in sorted(DATA_DIR.rglob("*")):
         if not path.is_file():
@@ -163,15 +181,21 @@ def load_all_chunks():
 
         if suffix == ".pdf":
             print(f"Reading PDF: {path.name}")
-            all_chunks.extend(load_pdf(path))
+            all_chunks.extend(
+                load_pdf(path, chunk_size=chunk_size, overlap=overlap)
+            )
 
         elif suffix == ".csv":
             print(f"Reading CSV: {path.name}")
-            all_chunks.extend(load_csv(path))
+            all_chunks.extend(
+                load_csv(path, chunk_size=chunk_size, overlap=overlap)
+            )
 
         elif suffix == ".json":
             print(f"Reading JSON: {path.name}")
-            all_chunks.extend(load_json(path))
+            all_chunks.extend(
+                load_json(path, chunk_size=chunk_size, overlap=overlap)
+            )
 
     return all_chunks
 

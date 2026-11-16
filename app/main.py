@@ -4,10 +4,9 @@ from pathlib import Path
 from typing import Optional
 from app.llm import generate_aqi_response
 from app.vectorstore import search_chunks
-
+from app.rag import answer_with_rag
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
-
 from app.smart_search import SmartSearch
 
 
@@ -18,7 +17,6 @@ app = FastAPI(
 )
 
 DATA_FILE = Path("data/records.json")
-
 
 def load_records():
 
@@ -38,10 +36,8 @@ def load_records():
     except json.JSONDecodeError:
         raise RuntimeError("records.json contains invalid JSON.")
 
-
 records = load_records()
 search_engine = SmartSearch(records)
-
 
 class QuestionRequest(BaseModel):
     question: str
@@ -50,6 +46,9 @@ class ChatRequest(BaseModel):
     question: str
     prompt_version: str = "v2"
 
+class AskRequest(BaseModel):
+    question: str
+    top_k: int = 5
 
 @app.get("/health")
 def health():
@@ -214,4 +213,40 @@ def semantic_search_endpoint(q: str, limit: int = 5):
         raise HTTPException(
             status_code=500,
             detail=f"Semantic search failed: {error}"
+        )
+
+@app.post("/ask")
+def ask_with_rag(request: AskRequest):
+    """Answer AQI questions using RAG and document citations."""
+
+    question = request.question.strip()
+
+    if not question:
+        raise HTTPException(
+            status_code=400,
+            detail="Question cannot be empty."
+        )
+
+    if request.top_k < 1 or request.top_k > 10:
+        raise HTTPException(
+            status_code=400,
+            detail="top_k must be between 1 and 10."
+        )
+
+    try:
+        return answer_with_rag(
+            question=question,
+            top_k=request.top_k
+        )
+
+    except ValueError as error:
+        raise HTTPException(
+            status_code=400,
+            detail=str(error)
+        )
+
+    except Exception as error:
+        raise HTTPException(
+            status_code=500,
+            detail=f"RAG request failed: {error}"
         )

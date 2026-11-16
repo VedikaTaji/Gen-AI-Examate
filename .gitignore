@@ -17,3 +17,6 @@ __pycache__/
 
 # Virtual environment
 .venv/
+
+# ChromaDB persistent vector database
+data/chroma/

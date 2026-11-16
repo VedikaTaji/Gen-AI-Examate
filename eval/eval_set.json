@@ -1,0 +1,93 @@
+
+[
+  {
+    "id": "Q1",
+    "question": "What is the Air Quality Index (AQI)?",
+    "expected_keywords": ["air quality", "index"],
+    "answerable": true
+  },
+  {
+    "id": "Q2",
+    "question": "What does the Severe AQI category indicate?",
+    "expected_keywords": ["severe", "AQI"],
+    "answerable": true
+  },
+  {
+    "id": "Q3",
+    "question": "What is PM2.5?",
+    "expected_keywords": ["PM2.5", "particulate"],
+    "answerable": true
+  },
+  {
+    "id": "Q4",
+    "question": "What is PM10?",
+    "expected_keywords": ["PM10", "particulate"],
+    "answerable": true
+  },
+  {
+    "id": "Q5",
+    "question": "Which organization publishes India's National Air Quality Index?",
+    "expected_keywords": ["CPCB", "Central Pollution Control Board"],
+    "answerable": true
+  },
+  {
+    "id": "Q6",
+    "question": "How has the AQI of Pune changed over the last 30 days?",
+    "expected_keywords": ["30 days", "historical AQI"],
+    "answerable": false
+  },
+  {
+    "id": "Q7",
+    "question": "What is the AQI of Nagpur?",
+    "expected_keywords": ["Nagpur", "AQI"],
+    "answerable": true
+  },
+  {
+    "id": "Q8",
+    "question": "What is the AQI of Pune?",
+    "expected_keywords": ["Pune", "AQI"],
+    "answerable": true
+  },
+  {
+    "id": "Q9",
+    "question": "What is the AQI of Aurangabad?",
+    "expected_keywords": ["Aurangabad", "AQI"],
+    "answerable": true
+  },
+  {
+    "id": "Q10",
+    "question": "Which city has the highest AQI in the available dataset?",
+    "expected_keywords": ["highest", "AQI"],
+    "answerable": true
+  },
+  {
+    "id": "Q11",
+    "question": "Which city has the lowest AQI in the available dataset?",
+    "expected_keywords": ["lowest", "AQI"],
+    "answerable": true
+  },
+  {
+    "id": "Q12",
+    "question": "Which prominent pollutant is reported for Mumbai?",
+    "expected_keywords": ["Mumbai", "pollutant"],
+    "answerable": true
+  },
+  {
+    "id": "Q13",
+    "question": "What are the different AQI categories?",
+    "expected_keywords": ["Good", "Satisfactory", "Moderate", "Poor", "Very Poor", "Severe"],
+    "answerable": true
+  },
+  {
+    "id": "Q14",
+    "question": "What information is provided by an AQI monitoring station?",
+    "expected_keywords": ["monitoring station", "pollutants", "AQI"],
+    "answerable": true
+  },
+  {
+    "id": "Q15",
+    "question": "Why is monitoring air quality important?",
+    "expected_keywords": ["air quality", "health", "pollution"],
+    "answerable": true
+  }
+]

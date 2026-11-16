@@ -1,0 +1,453 @@
+{
+    "winner": "Configuration A",
+    "configurations": [
+        {
+            "name": "Configuration A",
+            "chunk_size": 900,
+            "overlap": 150,
+            "top_k": 3,
+            "collection_name": "aqi_eval_a",
+            "total_questions": 15,
+            "answerable_questions": 14,
+            "keyword_hits": 14,
+            "hit_rate_percent": 100.0,
+            "mean_similarity": 0.549,
+            "question_results": [
+                {
+                    "id": "Q1",
+                    "question": "What is the Air Quality Index (AQI)?",
+                    "answerable": true,
+                    "retrieved_chunks": 3,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\About_AQI.pdf",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\About_AQI.pdf"
+                    ]
+                },
+                {
+                    "id": "Q2",
+                    "question": "What does the Severe AQI category indicate?",
+                    "answerable": true,
+                    "retrieved_chunks": 3,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\About_AQI.pdf"
+                    ]
+                },
+                {
+                    "id": "Q3",
+                    "question": "What is PM2.5?",
+                    "answerable": true,
+                    "retrieved_chunks": 3,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\About_AQI.pdf",
+                        "data\\raw\\About_AQI.pdf",
+                        "data\\raw\\aqi_data.csv"
+                    ]
+                },
+                {
+                    "id": "Q4",
+                    "question": "What is PM10?",
+                    "answerable": true,
+                    "retrieved_chunks": 3,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv"
+                    ]
+                },
+                {
+                    "id": "Q5",
+                    "question": "Which organization publishes India's National Air Quality Index?",
+                    "answerable": true,
+                    "retrieved_chunks": 3,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\About_AQI.pdf",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf"
+                    ]
+                },
+                {
+                    "id": "Q6",
+                    "question": "How has the AQI of Pune changed over the last 30 days?",
+                    "answerable": false,
+                    "retrieved_chunks": 3,
+                    "keyword_hit": null,
+                    "status": "UNANSWERABLE - verify abstention separately",
+                    "sources": [
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv"
+                    ]
+                },
+                {
+                    "id": "Q7",
+                    "question": "What is the AQI of Nagpur?",
+                    "answerable": true,
+                    "retrieved_chunks": 3,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv"
+                    ]
+                },
+                {
+                    "id": "Q8",
+                    "question": "What is the AQI of Pune?",
+                    "answerable": true,
+                    "retrieved_chunks": 3,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\aqi_data.csv"
+                    ]
+                },
+                {
+                    "id": "Q9",
+                    "question": "What is the AQI of Aurangabad?",
+                    "answerable": true,
+                    "retrieved_chunks": 3,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\aqi_data.csv"
+                    ]
+                },
+                {
+                    "id": "Q10",
+                    "question": "Which city has the highest AQI in the available dataset?",
+                    "answerable": true,
+                    "retrieved_chunks": 3,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv"
+                    ]
+                },
+                {
+                    "id": "Q11",
+                    "question": "Which city has the lowest AQI in the available dataset?",
+                    "answerable": true,
+                    "retrieved_chunks": 3,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv"
+                    ]
+                },
+                {
+                    "id": "Q12",
+                    "question": "Which prominent pollutant is reported for Mumbai?",
+                    "answerable": true,
+                    "retrieved_chunks": 3,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv"
+                    ]
+                },
+                {
+                    "id": "Q13",
+                    "question": "What are the different AQI categories?",
+                    "answerable": true,
+                    "retrieved_chunks": 3,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\About_AQI.pdf"
+                    ]
+                },
+                {
+                    "id": "Q14",
+                    "question": "What information is provided by an AQI monitoring station?",
+                    "answerable": true,
+                    "retrieved_chunks": 3,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv"
+                    ]
+                },
+                {
+                    "id": "Q15",
+                    "question": "Why is monitoring air quality important?",
+                    "answerable": true,
+                    "retrieved_chunks": 3,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\About_AQI.pdf",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Configuration B",
+            "chunk_size": 500,
+            "overlap": 100,
+            "top_k": 5,
+            "collection_name": "aqi_eval_b",
+            "total_questions": 15,
+            "answerable_questions": 14,
+            "keyword_hits": 14,
+            "hit_rate_percent": 100.0,
+            "mean_similarity": 0.5191,
+            "question_results": [
+                {
+                    "id": "Q1",
+                    "question": "What is the Air Quality Index (AQI)?",
+                    "answerable": true,
+                    "retrieved_chunks": 5,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\About_AQI.pdf",
+                        "data\\raw\\About_AQI.pdf",
+                        "data\\raw\\About_AQI.pdf",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf"
+                    ]
+                },
+                {
+                    "id": "Q2",
+                    "question": "What does the Severe AQI category indicate?",
+                    "answerable": true,
+                    "retrieved_chunks": 5,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\About_AQI.pdf",
+                        "data\\raw\\About_AQI.pdf",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\About_AQI.pdf"
+                    ]
+                },
+                {
+                    "id": "Q3",
+                    "question": "What is PM2.5?",
+                    "answerable": true,
+                    "retrieved_chunks": 5,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\About_AQI.pdf",
+                        "data\\raw\\About_AQI.pdf",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\About_AQI.pdf"
+                    ]
+                },
+                {
+                    "id": "Q4",
+                    "question": "What is PM10?",
+                    "answerable": true,
+                    "retrieved_chunks": 5,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv"
+                    ]
+                },
+                {
+                    "id": "Q5",
+                    "question": "Which organization publishes India's National Air Quality Index?",
+                    "answerable": true,
+                    "retrieved_chunks": 5,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\About_AQI.pdf",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf"
+                    ]
+                },
+                {
+                    "id": "Q6",
+                    "question": "How has the AQI of Pune changed over the last 30 days?",
+                    "answerable": false,
+                    "retrieved_chunks": 5,
+                    "keyword_hit": null,
+                    "status": "UNANSWERABLE - verify abstention separately",
+                    "sources": [
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\aqi_data.csv"
+                    ]
+                },
+                {
+                    "id": "Q7",
+                    "question": "What is the AQI of Nagpur?",
+                    "answerable": true,
+                    "retrieved_chunks": 5,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf"
+                    ]
+                },
+                {
+                    "id": "Q8",
+                    "question": "What is the AQI of Pune?",
+                    "answerable": true,
+                    "retrieved_chunks": 5,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv"
+                    ]
+                },
+                {
+                    "id": "Q9",
+                    "question": "What is the AQI of Aurangabad?",
+                    "answerable": true,
+                    "retrieved_chunks": 5,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf"
+                    ]
+                },
+                {
+                    "id": "Q10",
+                    "question": "Which city has the highest AQI in the available dataset?",
+                    "answerable": true,
+                    "retrieved_chunks": 5,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv"
+                    ]
+                },
+                {
+                    "id": "Q11",
+                    "question": "Which city has the lowest AQI in the available dataset?",
+                    "answerable": true,
+                    "retrieved_chunks": 5,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv"
+                    ]
+                },
+                {
+                    "id": "Q12",
+                    "question": "Which prominent pollutant is reported for Mumbai?",
+                    "answerable": true,
+                    "retrieved_chunks": 5,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf"
+                    ]
+                },
+                {
+                    "id": "Q13",
+                    "question": "What are the different AQI categories?",
+                    "answerable": true,
+                    "retrieved_chunks": 5,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\About_AQI.pdf",
+                        "data\\raw\\About_AQI.pdf",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\About_AQI.pdf"
+                    ]
+                },
+                {
+                    "id": "Q14",
+                    "question": "What information is provided by an AQI monitoring station?",
+                    "answerable": true,
+                    "retrieved_chunks": 5,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\About_AQI.pdf",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv",
+                        "data\\raw\\aqi_data.csv"
+                    ]
+                },
+                {
+                    "id": "Q15",
+                    "question": "Why is monitoring air quality important?",
+                    "answerable": true,
+                    "retrieved_chunks": 5,
+                    "keyword_hit": true,
+                    "status": "HIT",
+                    "sources": [
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\About_AQI.pdf",
+                        "data\\raw\\About_AQI.pdf",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf",
+                        "data\\raw\\AQI_Bulletin_20261106.pdf"
+                    ]
+                }
+            ]
+        }
+    ]
+}

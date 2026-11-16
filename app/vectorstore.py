@@ -21,35 +21,43 @@ def get_client():
     )
 
 
-def get_collection():
-    """Get the existing AQI collection or create it."""
+def get_collection(collection_name=COLLECTION_NAME):
+    """Get an existing collection or create it."""
     client = get_client()
 
     return client.get_or_create_collection(
-        name=COLLECTION_NAME,
+        name=collection_name,
         embedding_function=get_embedding_function(),
         metadata={"hnsw:space": "cosine"}
     )
 
 
-def build_index():
-    """Chunk, embed and store all supported documents."""
+def build_index(
+    chunk_size=900,
+    overlap=150,
+    collection_name=COLLECTION_NAME
+):
+    """Chunk, embed and store documents in a named collection."""
     client = get_client()
 
-    # Rebuild the collection to avoid duplicate/stale chunks.
+    # Delete only the collection being rebuilt.
     try:
-        client.delete_collection(name=COLLECTION_NAME)
-        print("Previous collection deleted.")
+        client.delete_collection(name=collection_name)
+        print(f"Previous collection deleted: {collection_name}")
     except Exception:
-        print("No previous collection found. Creating a new one.")
+        print(f"No previous collection found: {collection_name}")
 
     collection = client.create_collection(
-        name=COLLECTION_NAME,
+        name=collection_name,
         embedding_function=get_embedding_function(),
         metadata={"hnsw:space": "cosine"}
     )
 
-    chunks = load_all_chunks()
+    # Generate chunks using the selected configuration.
+    chunks = load_all_chunks(
+        chunk_size=chunk_size,
+        overlap=overlap
+    )
 
     if not chunks:
         print("No document chunks found. Nothing to index.")
@@ -59,7 +67,7 @@ def build_index():
     documents = [chunk["text"] for chunk in chunks]
     metadatas = [chunk["metadata"] for chunk in chunks]
 
-    # Add in batches to avoid oversized requests.
+    # Add chunks in batches.
     batch_size = 100
 
     for start in range(0, len(chunks), batch_size):
@@ -74,15 +82,21 @@ def build_index():
         print(f"Indexed {min(end, len(chunks))}/{len(chunks)} chunks")
 
     print("\nChromaDB indexing completed.")
-    print("Collection:", COLLECTION_NAME)
+    print("Collection:", collection_name)
+    print("Chunk size:", chunk_size)
+    print("Overlap:", overlap)
     print("Total indexed chunks:", collection.count())
 
     return collection.count()
 
 
-def search_chunks(question, top_k=5):
-    """Search indexed documents semantically."""
-    collection = get_collection()
+def search_chunks(
+    question,
+    top_k=5,
+    collection_name=COLLECTION_NAME
+):
+    """Search a selected collection semantically."""
+    collection = get_collection(collection_name)
 
     return semantic_search(
         collection=collection,
