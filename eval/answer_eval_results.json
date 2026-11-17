@@ -1,0 +1,525 @@
+{
+    "total_questions": 15,
+    "successful_api_calls": 7,
+    "failed_api_calls": 8,
+    "api_success_rate": 46.67,
+    "answerable_questions": 6,
+    "unanswerable_questions": 1,
+    "answer_fact_coverage": null,
+    "answer_accuracy_proxy": null,
+    "refusal_accuracy": 71.43,
+    "citation_reference_validity": 100,
+    "average_latency_seconds": 1.619,
+    "results": [
+        {
+            "id": "Q1",
+            "question": "What is the Air Quality Index (AQI)?",
+            "answerable": true,
+            "answer": "The Air Quality Index (AQI) is a tool for effective communication of air quality status to people in terms that are easy to understand. It transforms complex air quality data of various pollutants into a single number (index value), nomenclature and colour, and is based on ambient concentration values of air pollutants and their likely health impacts (health breakpoints). The AQI is calculated from sub\u2011indices for eight pollutants (PM10, PM2.5, NO2, SO2, CO, O3, NH3, and Pb), with the worst sub\u2011index determining the overall AQI. The index is divided into six categories: Good, Satisfactory, Moderately polluted, Poor, Very Poor, and Severe, each with defined concentration ranges and health impact descriptions. [1][3]",
+            "answer_score": null,
+            "answer_correct": null,
+            "refused": false,
+            "refusal_correct": true,
+            "citations": [
+                {
+                    "reference": 1,
+                    "title": "About AQI",
+                    "source": "data\\raw\\About_AQI.pdf",
+                    "page": "1",
+                    "similarity": 0.7734
+                },
+                {
+                    "reference": 2,
+                    "title": "AQI Bulletin 20261106",
+                    "source": "data\\raw\\AQI_Bulletin_20261106.pdf",
+                    "page": "15",
+                    "similarity": 0.7484
+                },
+                {
+                    "reference": 3,
+                    "title": "About AQI",
+                    "source": "data\\raw\\About_AQI.pdf",
+                    "page": "1",
+                    "similarity": 0.681
+                },
+                {
+                    "reference": 4,
+                    "title": "AQI Bulletin 20261106",
+                    "source": "data\\raw\\AQI_Bulletin_20261106.pdf",
+                    "page": "15",
+                    "similarity": 0.5888
+                },
+                {
+                    "reference": 5,
+                    "title": "AQI Bulletin 20261106",
+                    "source": "data\\raw\\AQI_Bulletin_20261106.pdf",
+                    "page": "15",
+                    "similarity": 0.5556
+                }
+            ],
+            "citation_references": [
+                1,
+                3
+            ],
+            "citation_valid": true,
+            "citation_coverage": 0.4,
+            "retrieved_chunks": 5,
+            "confidence": "high",
+            "latency_seconds": 1.628,
+            "api_success": true,
+            "error": null
+        },
+        {
+            "id": "Q2",
+            "question": "What does the Severe AQI category indicate?",
+            "answerable": true,
+            "answer": "The Severe AQI category (401\u2011500) indicates that the air quality is severe, affecting healthy people and seriously impacting those with existing diseases. [1]",
+            "answer_score": null,
+            "answer_correct": null,
+            "refused": false,
+            "refusal_correct": true,
+            "citations": [
+                {
+                    "reference": 1,
+                    "title": "AQI Bulletin 20261106",
+                    "source": "data\\raw\\AQI_Bulletin_20261106.pdf",
+                    "page": "15",
+                    "similarity": 0.657
+                },
+                {
+                    "reference": 2,
+                    "title": "AQI Bulletin 20261106",
+                    "source": "data\\raw\\AQI_Bulletin_20261106.pdf",
+                    "page": "15",
+                    "similarity": 0.5711
+                },
+                {
+                    "reference": 3,
+                    "title": "About AQI",
+                    "source": "data\\raw\\About_AQI.pdf",
+                    "page": "1",
+                    "similarity": 0.497
+                },
+                {
+                    "reference": 4,
+                    "title": "About AQI",
+                    "source": "data\\raw\\About_AQI.pdf",
+                    "page": "1",
+                    "similarity": 0.4424
+                },
+                {
+                    "reference": 5,
+                    "title": "aqi data",
+                    "source": "data\\raw\\aqi_data.csv",
+                    "page": "row-11",
+                    "similarity": 0.4242
+                }
+            ],
+            "citation_references": [
+                1
+            ],
+            "citation_valid": true,
+            "citation_coverage": 0.2,
+            "retrieved_chunks": 5,
+            "confidence": "high",
+            "latency_seconds": 1.396,
+            "api_success": true,
+            "error": null
+        },
+        {
+            "id": "Q3",
+            "question": "What is PM2.5?",
+            "answerable": true,
+            "answer": "PM2.5 is a pollutant whose ambient concentration is measured in micrograms per cubic meter (\u00b5g/m\u00b3). The AQI sub\u2011index for PM2.5 is calculated as a linear function of its concentration\u2014for example, a concentration of 31\u202f\u00b5g/m\u00b3 corresponds to a sub\u2011index of 51, 45\u202f\u00b5g/m\u00b3 to 75, and 60\u202f\u00b5g/m\u00b3 to 100. The AQI categories define health breakpoints for PM2.5: Good (0\u201350\u202f\u00b5g/m\u00b3), Satisfactory (51\u2013100\u202f\u00b5g/m\u00b3), Moderately Polluted (101\u2013200\u202f\u00b5g/m\u00b3), Poor (201\u2013300\u202f\u00b5g/m\u00b3), Very Poor (301\u2013400\u202f\u00b5g/m\u00b3), and Severe (401\u2013500\u202f\u00b5g/m\u00b3) [1].",
+            "answer_score": null,
+            "answer_correct": null,
+            "refused": false,
+            "refusal_correct": true,
+            "citations": [
+                {
+                    "reference": 1,
+                    "title": "About AQI",
+                    "source": "data\\raw\\About_AQI.pdf",
+                    "page": "1",
+                    "similarity": 0.3812
+                },
+                {
+                    "reference": 2,
+                    "title": "About AQI",
+                    "source": "data\\raw\\About_AQI.pdf",
+                    "page": "1",
+                    "similarity": 0.3654
+                },
+                {
+                    "reference": 3,
+                    "title": "aqi data",
+                    "source": "data\\raw\\aqi_data.csv",
+                    "page": "row-18",
+                    "similarity": 0.3574
+                },
+                {
+                    "reference": 4,
+                    "title": "aqi data",
+                    "source": "data\\raw\\aqi_data.csv",
+                    "page": "row-16",
+                    "similarity": 0.3363
+                },
+                {
+                    "reference": 5,
+                    "title": "aqi data",
+                    "source": "data\\raw\\aqi_data.csv",
+                    "page": "row-11",
+                    "similarity": 0.3321
+                }
+            ],
+            "citation_references": [
+                1
+            ],
+            "citation_valid": true,
+            "citation_coverage": 0.2,
+            "retrieved_chunks": 5,
+            "confidence": "high",
+            "latency_seconds": 1.595,
+            "api_success": true,
+            "error": null
+        },
+        {
+            "id": "Q4",
+            "question": "What is PM10?",
+            "answerable": true,
+            "answer": "I don't know",
+            "answer_score": null,
+            "answer_correct": null,
+            "refused": true,
+            "refusal_correct": false,
+            "citations": [
+                {
+                    "reference": 1,
+                    "title": "aqi data",
+                    "source": "data\\raw\\aqi_data.csv",
+                    "page": "row-11",
+                    "similarity": 0.3692
+                },
+                {
+                    "reference": 2,
+                    "title": "aqi data",
+                    "source": "data\\raw\\aqi_data.csv",
+                    "page": "row-18",
+                    "similarity": 0.3551
+                },
+                {
+                    "reference": 3,
+                    "title": "aqi data",
+                    "source": "data\\raw\\aqi_data.csv",
+                    "page": "row-8",
+                    "similarity": 0.3474
+                },
+                {
+                    "reference": 4,
+                    "title": "aqi data",
+                    "source": "data\\raw\\aqi_data.csv",
+                    "page": "row-13",
+                    "similarity": 0.3428
+                },
+                {
+                    "reference": 5,
+                    "title": "aqi data",
+                    "source": "data\\raw\\aqi_data.csv",
+                    "page": "row-16",
+                    "similarity": 0.3362
+                }
+            ],
+            "citation_references": [],
+            "citation_valid": true,
+            "citation_coverage": 0.0,
+            "retrieved_chunks": 5,
+            "confidence": "low",
+            "latency_seconds": 1.842,
+            "api_success": true,
+            "error": null
+        },
+        {
+            "id": "Q5",
+            "question": "Which organization publishes India's National Air Quality Index?",
+            "answerable": true,
+            "answer": "I don't know",
+            "answer_score": null,
+            "answer_correct": null,
+            "refused": true,
+            "refusal_correct": false,
+            "citations": [
+                {
+                    "reference": 1,
+                    "title": "About AQI",
+                    "source": "data\\raw\\About_AQI.pdf",
+                    "page": "1",
+                    "similarity": 0.6431
+                },
+                {
+                    "reference": 2,
+                    "title": "AQI Bulletin 20261106",
+                    "source": "data\\raw\\AQI_Bulletin_20261106.pdf",
+                    "page": "15",
+                    "similarity": 0.6331
+                },
+                {
+                    "reference": 3,
+                    "title": "AQI Bulletin 20261106",
+                    "source": "data\\raw\\AQI_Bulletin_20261106.pdf",
+                    "page": "15",
+                    "similarity": 0.6182
+                },
+                {
+                    "reference": 4,
+                    "title": "AQI Bulletin 20261106",
+                    "source": "data\\raw\\AQI_Bulletin_20261106.pdf",
+                    "page": "6",
+                    "similarity": 0.5214
+                },
+                {
+                    "reference": 5,
+                    "title": "aqi data",
+                    "source": "data\\raw\\aqi_data.csv",
+                    "page": "row-19",
+                    "similarity": 0.5172
+                }
+            ],
+            "citation_references": [],
+            "citation_valid": true,
+            "citation_coverage": 0.0,
+            "retrieved_chunks": 5,
+            "confidence": "low",
+            "latency_seconds": 2.16,
+            "api_success": true,
+            "error": null
+        },
+        {
+            "id": "Q6",
+            "question": "How has the AQI of Pune changed over the last 30 days?",
+            "answerable": false,
+            "answer": "I don't know",
+            "answer_score": null,
+            "answer_correct": null,
+            "refused": true,
+            "refusal_correct": true,
+            "citations": [],
+            "citation_references": [],
+            "citation_valid": true,
+            "citation_coverage": 0.0,
+            "retrieved_chunks": 5,
+            "confidence": "low",
+            "latency_seconds": 1.622,
+            "api_success": true,
+            "error": null
+        },
+        {
+            "id": "Q7",
+            "question": "What is the AQI of Nagpur?",
+            "answerable": true,
+            "answer": null,
+            "answer_score": null,
+            "answer_correct": null,
+            "refused": null,
+            "refusal_correct": false,
+            "citations": [],
+            "citation_references": [],
+            "citation_valid": false,
+            "citation_coverage": 0,
+            "retrieved_chunks": 0,
+            "confidence": "low",
+            "latency_seconds": 1.32,
+            "api_success": false,
+            "error": "429 Client Error: Too Many Requests for url: https://api.groq.com/openai/v1/chat/completions"
+        },
+        {
+            "id": "Q8",
+            "question": "What is the AQI of Pune?",
+            "answerable": true,
+            "answer": null,
+            "answer_score": null,
+            "answer_correct": null,
+            "refused": null,
+            "refusal_correct": false,
+            "citations": [],
+            "citation_references": [],
+            "citation_valid": false,
+            "citation_coverage": 0,
+            "retrieved_chunks": 0,
+            "confidence": "low",
+            "latency_seconds": 1.287,
+            "api_success": false,
+            "error": "429 Client Error: Too Many Requests for url: https://api.groq.com/openai/v1/chat/completions"
+        },
+        {
+            "id": "Q9",
+            "question": "What is the AQI of Aurangabad?",
+            "answerable": true,
+            "answer": null,
+            "answer_score": null,
+            "answer_correct": null,
+            "refused": null,
+            "refusal_correct": false,
+            "citations": [],
+            "citation_references": [],
+            "citation_valid": false,
+            "citation_coverage": 0,
+            "retrieved_chunks": 0,
+            "confidence": "low",
+            "latency_seconds": 0.475,
+            "api_success": false,
+            "error": "429 Client Error: Too Many Requests for url: https://api.groq.com/openai/v1/chat/completions"
+        },
+        {
+            "id": "Q10",
+            "question": "Which city has the highest AQI in the available dataset?",
+            "answerable": true,
+            "answer": null,
+            "answer_score": null,
+            "answer_correct": null,
+            "refused": null,
+            "refusal_correct": false,
+            "citations": [],
+            "citation_references": [],
+            "citation_valid": false,
+            "citation_coverage": 0,
+            "retrieved_chunks": 0,
+            "confidence": "low",
+            "latency_seconds": 0.439,
+            "api_success": false,
+            "error": "429 Client Error: Too Many Requests for url: https://api.groq.com/openai/v1/chat/completions"
+        },
+        {
+            "id": "Q11",
+            "question": "Which city has the lowest AQI in the available dataset?",
+            "answerable": true,
+            "answer": "The city with the lowest AQI in the available dataset is Latur, with an AQI value of 50 [5].",
+            "answer_score": null,
+            "answer_correct": null,
+            "refused": false,
+            "refusal_correct": true,
+            "citations": [
+                {
+                    "reference": 1,
+                    "title": "AQI Bulletin 20261106",
+                    "source": "data\\raw\\AQI_Bulletin_20261106.pdf",
+                    "page": "15",
+                    "similarity": 0.5675
+                },
+                {
+                    "reference": 2,
+                    "title": "aqi data",
+                    "source": "data\\raw\\aqi_data.csv",
+                    "page": "row-8",
+                    "similarity": 0.5306
+                },
+                {
+                    "reference": 3,
+                    "title": "aqi data",
+                    "source": "data\\raw\\aqi_data.csv",
+                    "page": "row-11",
+                    "similarity": 0.509
+                },
+                {
+                    "reference": 4,
+                    "title": "aqi data",
+                    "source": "data\\raw\\aqi_data.csv",
+                    "page": "row-13",
+                    "similarity": 0.5077
+                },
+                {
+                    "reference": 5,
+                    "title": "aqi data",
+                    "source": "data\\raw\\aqi_data.csv",
+                    "page": "row-15",
+                    "similarity": 0.5048
+                }
+            ],
+            "citation_references": [
+                5
+            ],
+            "citation_valid": true,
+            "citation_coverage": 0.2,
+            "retrieved_chunks": 5,
+            "confidence": "high",
+            "latency_seconds": 1.087,
+            "api_success": true,
+            "error": null
+        },
+        {
+            "id": "Q12",
+            "question": "Which prominent pollutant is reported for Mumbai?",
+            "answerable": true,
+            "answer": null,
+            "answer_score": null,
+            "answer_correct": null,
+            "refused": null,
+            "refusal_correct": false,
+            "citations": [],
+            "citation_references": [],
+            "citation_valid": false,
+            "citation_coverage": 0,
+            "retrieved_chunks": 0,
+            "confidence": "low",
+            "latency_seconds": 0.434,
+            "api_success": false,
+            "error": "429 Client Error: Too Many Requests for url: https://api.groq.com/openai/v1/chat/completions"
+        },
+        {
+            "id": "Q13",
+            "question": "What are the different AQI categories?",
+            "answerable": true,
+            "answer": null,
+            "answer_score": null,
+            "answer_correct": null,
+            "refused": null,
+            "refusal_correct": false,
+            "citations": [],
+            "citation_references": [],
+            "citation_valid": false,
+            "citation_coverage": 0,
+            "retrieved_chunks": 0,
+            "confidence": "low",
+            "latency_seconds": 0.429,
+            "api_success": false,
+            "error": "429 Client Error: Too Many Requests for url: https://api.groq.com/openai/v1/chat/completions"
+        },
+        {
+            "id": "Q14",
+            "question": "What information is provided by an AQI monitoring station?",
+            "answerable": true,
+            "answer": null,
+            "answer_score": null,
+            "answer_correct": null,
+            "refused": null,
+            "refusal_correct": false,
+            "citations": [],
+            "citation_references": [],
+            "citation_valid": false,
+            "citation_coverage": 0,
+            "retrieved_chunks": 0,
+            "confidence": "low",
+            "latency_seconds": 0.452,
+            "api_success": false,
+            "error": "429 Client Error: Too Many Requests for url: https://api.groq.com/openai/v1/chat/completions"
+        },
+        {
+            "id": "Q15",
+            "question": "Why is monitoring air quality important?",
+            "answerable": true,
+            "answer": null,
+            "answer_score": null,
+            "answer_correct": null,
+            "refused": null,
+            "refusal_correct": false,
+            "citations": [],
+            "citation_references": [],
+            "citation_valid": false,
+            "citation_coverage": 0,
+            "retrieved_chunks": 0,
+            "confidence": "low",
+            "latency_seconds": 0.414,
+            "api_success": false,
+            "error": "429 Client Error: Too Many Requests for url: https://api.groq.com/openai/v1/chat/completions"
+        }
+    ]
+}

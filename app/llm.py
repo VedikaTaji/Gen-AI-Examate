@@ -84,6 +84,11 @@ def call_groq(system_prompt, user_prompt):
         timeout=45
     )
 
+    if not response.ok:
+        print("\nGROQ API ERROR:")
+        print("Status Code:", response.status_code)
+        print("Error Details:", response.text)
+
     response.raise_for_status()
 
     response_data = response.json()

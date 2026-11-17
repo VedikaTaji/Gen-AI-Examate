@@ -8,6 +8,7 @@ from app.rag import answer_with_rag
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
 from app.smart_search import SmartSearch
+from app.graph import run_agent_graph
 
 
 app = FastAPI(
@@ -49,6 +50,11 @@ class ChatRequest(BaseModel):
 class AskRequest(BaseModel):
     question: str
     top_k: int = 5
+
+class AgentRequest(BaseModel):
+    question: str = None
+    thread_id: str = "default"
+    approval: bool = None
 
 @app.get("/health")
 def health():
@@ -249,4 +255,40 @@ def ask_with_rag(request: AskRequest):
         raise HTTPException(
             status_code=500,
             detail=f"RAG request failed: {error}"
+        )
+
+@app.post("/agent")
+def agent_endpoint(request: AgentRequest):
+
+    try:
+        if not request.thread_id.strip():
+            raise HTTPException(
+                status_code=400,
+                detail="thread_id cannot be empty."
+            )
+
+        if request.approval is None and not request.question:
+            raise HTTPException(
+                status_code=400,
+                detail="Question is required."
+            )
+
+        result = run_agent_graph(
+            question=request.question,
+            thread_id=request.thread_id,
+            approval=request.approval
+        )
+
+        return result
+
+    except ValueError as error:
+        raise HTTPException(
+            status_code=400,
+            detail=str(error)
+        )
+
+    except Exception as error:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Agent execution failed: {error}"
         )

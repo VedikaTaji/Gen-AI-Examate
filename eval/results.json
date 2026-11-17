@@ -1,5 +1,6 @@
 {
-    "winner": "Configuration A",
+    "winner": "Configuration B",
+    "winner_selection": "Recall@K, then Precision@K, then MRR",
     "configurations": [
         {
             "name": "Configuration A",
@@ -11,6 +12,9 @@
             "answerable_questions": 14,
             "keyword_hits": 14,
             "hit_rate_percent": 100.0,
+            "precision_at_k": 0.9286,
+            "recall_at_k": 0.75,
+            "mrr": 0.9524,
             "mean_similarity": 0.549,
             "question_results": [
                 {
@@ -19,11 +23,21 @@
                     "answerable": true,
                     "retrieved_chunks": 3,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 1.0,
+                    "mrr": 1.0,
+                    "matched_groups": 2,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\About_AQI.pdf",
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\About_AQI.pdf"
+                    ],
+                    "similarities": [
+                        0.7734,
+                        0.7484,
+                        0.681
                     ]
                 },
                 {
@@ -32,11 +46,21 @@
                     "answerable": true,
                     "retrieved_chunks": 3,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 1.0,
+                    "mrr": 1.0,
+                    "matched_groups": 2,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\About_AQI.pdf"
+                    ],
+                    "similarities": [
+                        0.657,
+                        0.5711,
+                        0.497
                     ]
                 },
                 {
@@ -45,11 +69,21 @@
                     "answerable": true,
                     "retrieved_chunks": 3,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 0.5,
+                    "mrr": 1.0,
+                    "matched_groups": 1,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\About_AQI.pdf",
                         "data\\raw\\About_AQI.pdf",
                         "data\\raw\\aqi_data.csv"
+                    ],
+                    "similarities": [
+                        0.3812,
+                        0.3654,
+                        0.3574
                     ]
                 },
                 {
@@ -58,11 +92,21 @@
                     "answerable": true,
                     "retrieved_chunks": 3,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 0.5,
+                    "mrr": 1.0,
+                    "matched_groups": 1,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv"
+                    ],
+                    "similarities": [
+                        0.3692,
+                        0.3551,
+                        0.3474
                     ]
                 },
                 {
@@ -71,11 +115,21 @@
                     "answerable": true,
                     "retrieved_chunks": 3,
                     "keyword_hit": true,
+                    "precision_at_k": 0.3333,
+                    "recall_at_k": 0.5,
+                    "mrr": 0.3333,
+                    "matched_groups": 1,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\About_AQI.pdf",
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\AQI_Bulletin_20261106.pdf"
+                    ],
+                    "similarities": [
+                        0.6431,
+                        0.6331,
+                        0.6182
                     ]
                 },
                 {
@@ -84,11 +138,21 @@
                     "answerable": false,
                     "retrieved_chunks": 3,
                     "keyword_hit": null,
-                    "status": "UNANSWERABLE - verify abstention separately",
+                    "precision_at_k": null,
+                    "recall_at_k": null,
+                    "mrr": null,
+                    "matched_groups": 0,
+                    "total_groups": 2,
+                    "status": "UNANSWERABLE - abstention evaluated separately",
                     "sources": [
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv"
+                    ],
+                    "similarities": [
+                        0.6272,
+                        0.4784,
+                        0.4526
                     ]
                 },
                 {
@@ -97,11 +161,21 @@
                     "answerable": true,
                     "retrieved_chunks": 3,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 1.0,
+                    "mrr": 1.0,
+                    "matched_groups": 2,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv"
+                    ],
+                    "similarities": [
+                        0.719,
+                        0.4934,
+                        0.469
                     ]
                 },
                 {
@@ -110,11 +184,21 @@
                     "answerable": true,
                     "retrieved_chunks": 3,
                     "keyword_hit": true,
+                    "precision_at_k": 0.6667,
+                    "recall_at_k": 1.0,
+                    "mrr": 1.0,
+                    "matched_groups": 2,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\aqi_data.csv"
+                    ],
+                    "similarities": [
+                        0.675,
+                        0.5157,
+                        0.5093
                     ]
                 },
                 {
@@ -123,11 +207,21 @@
                     "answerable": true,
                     "retrieved_chunks": 3,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 1.0,
+                    "mrr": 1.0,
+                    "matched_groups": 2,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\aqi_data.csv"
+                    ],
+                    "similarities": [
+                        0.6296,
+                        0.5515,
+                        0.5121
                     ]
                 },
                 {
@@ -136,11 +230,21 @@
                     "answerable": true,
                     "retrieved_chunks": 3,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 0.5,
+                    "mrr": 1.0,
+                    "matched_groups": 1,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv"
+                    ],
+                    "similarities": [
+                        0.5955,
+                        0.5466,
+                        0.5252
                     ]
                 },
                 {
@@ -149,11 +253,21 @@
                     "answerable": true,
                     "retrieved_chunks": 3,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 0.5,
+                    "mrr": 1.0,
+                    "matched_groups": 1,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv"
+                    ],
+                    "similarities": [
+                        0.5675,
+                        0.5306,
+                        0.509
                     ]
                 },
                 {
@@ -162,11 +276,21 @@
                     "answerable": true,
                     "retrieved_chunks": 3,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 1.0,
+                    "mrr": 1.0,
+                    "matched_groups": 2,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv"
+                    ],
+                    "similarities": [
+                        0.7034,
+                        0.6391,
+                        0.5714
                     ]
                 },
                 {
@@ -175,11 +299,21 @@
                     "answerable": true,
                     "retrieved_chunks": 3,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 1.0,
+                    "mrr": 1.0,
+                    "matched_groups": 6,
+                    "total_groups": 6,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\About_AQI.pdf"
+                    ],
+                    "similarities": [
+                        0.6121,
+                        0.6068,
+                        0.4883
                     ]
                 },
                 {
@@ -188,11 +322,21 @@
                     "answerable": true,
                     "retrieved_chunks": 3,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 0.3333,
+                    "mrr": 1.0,
+                    "matched_groups": 1,
+                    "total_groups": 3,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv"
+                    ],
+                    "similarities": [
+                        0.5904,
+                        0.4957,
+                        0.4865
                     ]
                 },
                 {
@@ -201,11 +345,21 @@
                     "answerable": true,
                     "retrieved_chunks": 3,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 0.6667,
+                    "mrr": 1.0,
+                    "matched_groups": 2,
+                    "total_groups": 3,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\About_AQI.pdf",
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\AQI_Bulletin_20261106.pdf"
+                    ],
+                    "similarities": [
+                        0.5492,
+                        0.5147,
+                        0.453
                     ]
                 }
             ]
@@ -220,6 +374,9 @@
             "answerable_questions": 14,
             "keyword_hits": 14,
             "hit_rate_percent": 100.0,
+            "precision_at_k": 0.8571,
+            "recall_at_k": 0.7738,
+            "mrr": 0.9464,
             "mean_similarity": 0.5191,
             "question_results": [
                 {
@@ -228,6 +385,11 @@
                     "answerable": true,
                     "retrieved_chunks": 5,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 1.0,
+                    "mrr": 1.0,
+                    "matched_groups": 2,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\About_AQI.pdf",
@@ -235,6 +397,13 @@
                         "data\\raw\\About_AQI.pdf",
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\AQI_Bulletin_20261106.pdf"
+                    ],
+                    "similarities": [
+                        0.8143,
+                        0.6924,
+                        0.6573,
+                        0.6337,
+                        0.5896
                     ]
                 },
                 {
@@ -243,6 +412,11 @@
                     "answerable": true,
                     "retrieved_chunks": 5,
                     "keyword_hit": true,
+                    "precision_at_k": 0.8,
+                    "recall_at_k": 1.0,
+                    "mrr": 1.0,
+                    "matched_groups": 2,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
@@ -250,6 +424,13 @@
                         "data\\raw\\About_AQI.pdf",
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\About_AQI.pdf"
+                    ],
+                    "similarities": [
+                        0.6608,
+                        0.5079,
+                        0.4618,
+                        0.4242,
+                        0.4025
                     ]
                 },
                 {
@@ -258,6 +439,11 @@
                     "answerable": true,
                     "retrieved_chunks": 5,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 0.5,
+                    "mrr": 1.0,
+                    "matched_groups": 1,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\About_AQI.pdf",
@@ -265,6 +451,13 @@
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\About_AQI.pdf"
+                    ],
+                    "similarities": [
+                        0.4135,
+                        0.3678,
+                        0.3574,
+                        0.3544,
+                        0.3433
                     ]
                 },
                 {
@@ -273,6 +466,11 @@
                     "answerable": true,
                     "retrieved_chunks": 5,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 0.5,
+                    "mrr": 1.0,
+                    "matched_groups": 1,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\aqi_data.csv",
@@ -280,6 +478,13 @@
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv"
+                    ],
+                    "similarities": [
+                        0.3692,
+                        0.3551,
+                        0.3474,
+                        0.3428,
+                        0.3362
                     ]
                 },
                 {
@@ -288,6 +493,11 @@
                     "answerable": true,
                     "retrieved_chunks": 5,
                     "keyword_hit": true,
+                    "precision_at_k": 0.2,
+                    "recall_at_k": 0.5,
+                    "mrr": 0.25,
+                    "matched_groups": 1,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\About_AQI.pdf",
@@ -295,6 +505,13 @@
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\AQI_Bulletin_20261106.pdf"
+                    ],
+                    "similarities": [
+                        0.6766,
+                        0.6556,
+                        0.6401,
+                        0.6292,
+                        0.6084
                     ]
                 },
                 {
@@ -303,13 +520,25 @@
                     "answerable": false,
                     "retrieved_chunks": 5,
                     "keyword_hit": null,
-                    "status": "UNANSWERABLE - verify abstention separately",
+                    "precision_at_k": null,
+                    "recall_at_k": null,
+                    "mrr": null,
+                    "matched_groups": 0,
+                    "total_groups": 2,
+                    "status": "UNANSWERABLE - abstention evaluated separately",
                     "sources": [
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\aqi_data.csv"
+                    ],
+                    "similarities": [
+                        0.6272,
+                        0.4784,
+                        0.4526,
+                        0.4484,
+                        0.44
                     ]
                 },
                 {
@@ -318,6 +547,11 @@
                     "answerable": true,
                     "retrieved_chunks": 5,
                     "keyword_hit": true,
+                    "precision_at_k": 0.8,
+                    "recall_at_k": 1.0,
+                    "mrr": 1.0,
+                    "matched_groups": 2,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\aqi_data.csv",
@@ -325,6 +559,13 @@
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\AQI_Bulletin_20261106.pdf"
+                    ],
+                    "similarities": [
+                        0.719,
+                        0.4934,
+                        0.4751,
+                        0.469,
+                        0.4632
                     ]
                 },
                 {
@@ -333,6 +574,11 @@
                     "answerable": true,
                     "retrieved_chunks": 5,
                     "keyword_hit": true,
+                    "precision_at_k": 0.8,
+                    "recall_at_k": 1.0,
+                    "mrr": 1.0,
+                    "matched_groups": 2,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\aqi_data.csv",
@@ -340,6 +586,13 @@
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv"
+                    ],
+                    "similarities": [
+                        0.675,
+                        0.5093,
+                        0.4806,
+                        0.4746,
+                        0.4543
                     ]
                 },
                 {
@@ -348,6 +601,11 @@
                     "answerable": true,
                     "retrieved_chunks": 5,
                     "keyword_hit": true,
+                    "precision_at_k": 0.6,
+                    "recall_at_k": 1.0,
+                    "mrr": 1.0,
+                    "matched_groups": 2,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\aqi_data.csv",
@@ -355,6 +613,13 @@
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\AQI_Bulletin_20261106.pdf"
+                    ],
+                    "similarities": [
+                        0.6296,
+                        0.518,
+                        0.5121,
+                        0.4967,
+                        0.4926
                     ]
                 },
                 {
@@ -363,6 +628,11 @@
                     "answerable": true,
                     "retrieved_chunks": 5,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 0.5,
+                    "mrr": 1.0,
+                    "matched_groups": 1,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\aqi_data.csv",
@@ -370,6 +640,13 @@
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv"
+                    ],
+                    "similarities": [
+                        0.5466,
+                        0.5282,
+                        0.5252,
+                        0.5196,
+                        0.5118
                     ]
                 },
                 {
@@ -378,6 +655,11 @@
                     "answerable": true,
                     "retrieved_chunks": 5,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 0.5,
+                    "mrr": 1.0,
+                    "matched_groups": 1,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\aqi_data.csv",
@@ -385,6 +667,13 @@
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv"
+                    ],
+                    "similarities": [
+                        0.5306,
+                        0.509,
+                        0.5077,
+                        0.5048,
+                        0.5025
                     ]
                 },
                 {
@@ -393,6 +682,11 @@
                     "answerable": true,
                     "retrieved_chunks": 5,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 1.0,
+                    "mrr": 1.0,
+                    "matched_groups": 2,
+                    "total_groups": 2,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\aqi_data.csv",
@@ -400,6 +694,13 @@
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\AQI_Bulletin_20261106.pdf"
+                    ],
+                    "similarities": [
+                        0.7034,
+                        0.6391,
+                        0.5714,
+                        0.5529,
+                        0.54
                     ]
                 },
                 {
@@ -408,6 +709,11 @@
                     "answerable": true,
                     "retrieved_chunks": 5,
                     "keyword_hit": true,
+                    "precision_at_k": 0.8,
+                    "recall_at_k": 1.0,
+                    "mrr": 1.0,
+                    "matched_groups": 6,
+                    "total_groups": 6,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
@@ -415,6 +721,13 @@
                         "data\\raw\\About_AQI.pdf",
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\About_AQI.pdf"
+                    ],
+                    "similarities": [
+                        0.6537,
+                        0.5286,
+                        0.5122,
+                        0.4826,
+                        0.4562
                     ]
                 },
                 {
@@ -423,6 +736,11 @@
                     "answerable": true,
                     "retrieved_chunks": 5,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 0.6667,
+                    "mrr": 1.0,
+                    "matched_groups": 2,
+                    "total_groups": 3,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
@@ -430,6 +748,13 @@
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv",
                         "data\\raw\\aqi_data.csv"
+                    ],
+                    "similarities": [
+                        0.5124,
+                        0.4967,
+                        0.4957,
+                        0.4865,
+                        0.475
                     ]
                 },
                 {
@@ -438,6 +763,11 @@
                     "answerable": true,
                     "retrieved_chunks": 5,
                     "keyword_hit": true,
+                    "precision_at_k": 1.0,
+                    "recall_at_k": 0.6667,
+                    "mrr": 1.0,
+                    "matched_groups": 2,
+                    "total_groups": 3,
                     "status": "HIT",
                     "sources": [
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
@@ -445,6 +775,13 @@
                         "data\\raw\\About_AQI.pdf",
                         "data\\raw\\AQI_Bulletin_20261106.pdf",
                         "data\\raw\\AQI_Bulletin_20261106.pdf"
+                    ],
+                    "similarities": [
+                        0.5793,
+                        0.5753,
+                        0.4965,
+                        0.4527,
+                        0.4377
                     ]
                 }
             ]
