@@ -7,7 +7,6 @@ from statistics import mean
 
 from app.rag import answer_with_rag
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 EVAL_FILE = BASE_DIR / "eval" / "eval_set.json"
 RESULT_FILE = BASE_DIR / "eval" / "answer_eval_results.json"

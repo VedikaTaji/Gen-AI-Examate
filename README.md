@@ -18,6 +18,9 @@ The project combines data processing, search techniques, Large Language Models (
 - Semantic search using vector embeddings.
 - RAG-based answers with document citations.
 - Cleaned and organized AQI data in JSON format.
+- AQI calculations using pollutant concentrations.
+- Agent-based question routing and human approval.
+- Interactive conversational interface.
 
 ## 2. Product
 
@@ -28,6 +31,7 @@ The project combines data processing, search techniques, Large Language Models (
 - Uses LLMs to generate natural-language AQI explanations.
 - Uses document retrieval and semantic search to find relevant AQI information.
 - Uses RAG to generate answers grounded in retrieved documents.
+- Provides AQI calculations and agent-based workflows.
 
 ## 3. Target Users
 
@@ -104,6 +108,21 @@ https://cpcb.nic.in/National-Air-Quality-Index/
 - Retrieval-Augmented Generation (RAG)
 - Source-based Citations
 
+### Agentic AI
+
+- Rule-Based Agent
+- LangGraph
+- Conditional Routing
+- Human-in-the-Loop Approval
+- Conversation State Management
+- MemorySaver Checkpointing
+
+### Frontend
+
+- Streamlit
+- Streamlit Session State
+- Conversational Chat Interface
+
 ### Development Tools
 
 - Git and GitHub
@@ -132,6 +151,15 @@ https://cpcb.nic.in/National-Air-Quality-Index/
 - Provide source references with generated answers.
 - Return "I don't know" when the requested historical information is unavailable.
 - Evaluate retrieval performance using predefined AQI questions and different configurations.
+- Calculate AQI sub-indices using pollutant concentrations.
+- Identify the dominant pollutant.
+- Route user requests using a rule-based agent.
+- Execute RAG and calculator workflows using LangGraph.
+- Request human approval before calculator execution.
+- Provide an interactive Streamlit chat interface.
+- Display source citations and conversation history.
+- Collect thumbs-up and thumbs-down user feedback.
+- Display a six-category CPCB AQI colour indicator with health-impact statements.
 
 ## 8. Project Structure
 
@@ -148,7 +176,8 @@ Gen-AI-Examate/
 │
 ├── docs/
 │   ├── how_llms_work.md
-│   └── user_questions.md
+│   ├── user_questions.md
+│   └── checkpoint-2.png
 │
 ├── analysis/
 │   └── explore.py
@@ -157,9 +186,9 @@ Gen-AI-Examate/
 │   ├── eval_set.json
 │   ├── run_eval.py
 │   ├── run_search_eval.py
-│   ├── search_results.md
 │   ├── results.json
 │   ├── results.md
+│   ├── search_results.md
 │   └── prompt_compare.md
 │
 ├── data/
@@ -167,27 +196,36 @@ Gen-AI-Examate/
 │   │   ├── AQI_Bulletin_20261106.pdf
 │   │   ├── About_AQI.pdf
 │   │   ├── aqi_data.csv
-│   │   └── Raw_Data_2026_site_198_more_chowk_waluj_aurangabad_mpcb_1D.csv
+│   │   ├── cpcb_aqi_portal.html
+│   │   └── cpcb_ogd_resource.html
 │   │
 │   ├── sample_records.py
 │   ├── records.json
-│   └── chroma/                 # Local ChromaDB storage (not committed)
+│   └── chroma/
 │
-└── app/
-    ├── __init__.py
-    ├── records.py
-    ├── cli.py
-    ├── models.py
-    ├── ingest.py
-    ├── fetch.py
-    ├── main.py
-    ├── smart_search.py
-    ├── llm.py
-    ├── chunking.py
-    ├── embed.py
-    ├── vectorstore.py
-    └── rag.py
+├── app/
+│   ├── __init__.py
+│   ├── records.py
+│   ├── cli.py
+│   ├── models.py
+│   ├── ingest.py
+│   ├── fetch.py
+│   ├── main.py
+│   ├── smart_search.py
+│   ├── llm.py
+│   ├── chunking.py
+│   ├── embed.py
+│   ├── vectorstore.py
+│   ├── rag.py
+│   ├── tools.py
+│   ├── agent_loop.py
+│   └── graph.py
+│
+└── ui/
+    └── app.py
 ```
+
+Note: `data/chroma/` contains local persistent vector database files. `ui/feedback.jsonl` is generated locally when feedback is submitted. The structure above lists the main project files; keep it aligned with the files actually present in the repository.
 
 ## 9. Project Progress
 
@@ -430,6 +468,132 @@ Keyword hit rate checks whether at least one expected keyword appears in the ret
 - Retrieval hit rate and similarity scores.
 - Abstention for unavailable information.
 
+### Day 9 – AQI Calculator and Agentic AI
+
+**S1: CPCB-Based AQI Calculator**
+
+- Created `app/tools.py`.
+- Implemented pollutant sub-index calculations using CPCB breakpoint interpolation.
+- Added support for PM2.5, PM10, NO2, O3, CO, SO2, NH3 and Pb.
+- Implemented pollutant value validation.
+- Calculated overall AQI using the highest pollutant sub-index.
+- Identified the dominant pollutant.
+- Added AQI category classification from Good to Severe.
+
+**S2: Rule-Based Agent**
+
+- Created `app/agent_loop.py`.
+- Implemented a rule-based agent to identify the type of user request.
+- Extracted pollutant values from user questions.
+- Routed calculation-related questions to the AQI calculator.
+- Routed general AQI questions to the RAG pipeline.
+
+**S3: LangGraph Workflow**
+
+- Created `app/graph.py`.
+- Implemented an agent workflow using LangGraph.
+- Created separate RAG and calculator nodes.
+- Added conditional routing between nodes.
+- Implemented human approval before calculator execution.
+- Added approval and rejection handling.
+- Implemented conversation state using LangGraph's MemorySaver checkpointer.
+
+**Testing**
+
+- Tested RAG-based question answering.
+- Tested pollutant-based AQI calculation.
+- Verified human approval before calculator execution.
+- Tested both approval and rejection workflows.
+- Verified that the agent resumes using the same conversation thread.
+
+**Concepts Learned:**
+
+- AQI breakpoint interpolation.
+- Pollutant sub-index calculation.
+- Rule-based agent routing.
+- LangGraph state management.
+- Conditional edges and workflow execution.
+- Human-in-the-loop approval.
+- Conversation checkpointing.
+
+### Day 10 – Advanced Evaluation and Streamlit Interface
+
+**S1: Retrieval Evaluation and A/B Comparison**
+
+- Improved retrieval evaluation using a 15-question AQI evaluation dataset.
+- Compared two retrieval configurations.
+- Evaluated keyword hit rate, Precision@K, Recall@K, Mean Reciprocal Rank (MRR) and mean similarity.
+- Compared chunk sizes, overlap and top-k retrieval values.
+
+**Evaluation Configurations**
+
+| Parameter | Configuration A | Configuration B |
+|---|---:|---:|
+| Chunk Size | 900 | 500 |
+| Overlap | 150 | 100 |
+| Top K | 3 | 5 |
+
+**Evaluation Results**
+
+| Metric | Configuration A | Configuration B |
+|---|---:|---:|
+| Keyword Hit Rate | 100% | 100% |
+| Precision@K | 0.9286 | 0.8571 |
+| Recall@K | 0.7500 | 0.7738 |
+| MRR | 0.9524 | 0.9464 |
+| Mean Similarity | 0.5490 | 0.5191 |
+
+**Observations**
+
+- Configuration A achieved better Precision@K, MRR and mean similarity.
+- Configuration B achieved slightly better Recall@K.
+- Both configurations achieved a 100% keyword hit rate.
+- Configuration A performed better on precision-oriented metrics, while Configuration B retrieved a slightly broader set of relevant chunks.
+
+**Evaluation Note:** These are preliminary retrieval metrics based on keyword matching and similarity. They do not independently establish factual answer correctness or citation support.
+
+**S2: Streamlit Conversational Interface**
+
+- Created `ui/app.py`.
+- Developed an interactive chat interface using Streamlit.
+- Connected the frontend to the FastAPI backend.
+- Added RAG interaction through the `/ask` endpoint.
+- Added LangGraph agent interaction through the `/agent` endpoint.
+- Displayed generated answers and source citations.
+- Implemented conversation history using Streamlit session state.
+- Added thumbs-up and thumbs-down feedback.
+- Stored user feedback locally in JSONL format.
+- Added controls for human approval and rejection of calculator execution.
+
+**S3: AQI Colour Indicator**
+
+Implemented a six-category AQI colour indicator based on the CPCB AQI scale.
+
+| AQI Range | Category | Colour |
+|---|---|---|
+| 0–50 | Good | Green |
+| 51–100 | Satisfactory | Light Green |
+| 101–200 | Moderately Polluted | Yellow |
+| 201–300 | Poor | Orange |
+| 301–400 | Very Poor | Red |
+| 401–500 | Severe | Maroon |
+
+- Added health-impact statements corresponding to each AQI category.
+- Displayed the AQI indicator when an explicit numeric AQI value is available.
+- Avoided inventing AQI values when the answer does not contain one.
+
+**Concepts Learned:**
+
+- Retrieval evaluation.
+- Precision@K and Recall@K.
+- Mean Reciprocal Rank.
+- A/B retrieval experiments.
+- Streamlit application development.
+- Session state and conversational history.
+- FastAPI and Streamlit integration.
+- User feedback collection.
+- AQI classification and visualization.
+
 ## 10. GitHub and Version Control
 
 - Maintained the project using Git and GitHub.
@@ -443,7 +607,7 @@ Keyword hit rate checks whether at least one expected keyword appears in the ret
 ### Step 1: Clone the Repository
 
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
+git clone https://github.com/VedikaTaji/Gen-AI-Examate.git
 cd Gen-AI-Examate
 ```
 
@@ -456,7 +620,7 @@ python -m venv .venv
 Activate it on Windows PowerShell:
 
 ```powershell
-.venv\Scripts\Activate.ps1
+.\.venv\Scripts\Activate.ps1
 ```
 
 ### Step 3: Install Dependencies
@@ -504,8 +668,12 @@ This creates or rebuilds the default `aqi_documents` collection using 900-charac
 ### Step 8: Start the FastAPI Server
 
 ```bash
-uvicorn app.main:app --reload
+python -m uvicorn app.main:app --reload
 ```
+
+Backend URL:
+
+http://127.0.0.1:8000
 
 ### Step 9: Open API Documentation
 
@@ -534,6 +702,28 @@ This builds two separate evaluation collections, compares the retrieval configur
 - `eval/results.json`
 - `eval/results.md`
 
+### Step 12: Run the Streamlit Frontend
+
+Open a second terminal in the project directory.
+
+Activate the virtual environment:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+Start Streamlit:
+
+```powershell
+python -m streamlit run ui/app.py
+```
+
+Frontend URL:
+
+http://localhost:8501
+
+Keep both the FastAPI backend and Streamlit frontend terminals running while using the application.
+
 ## 12. Available API Endpoints
 
 | Method | Endpoint | Description |
@@ -546,6 +736,7 @@ This builds two separate evaluation collections, compares the retrieval configur
 | POST | `/chat` | Generate AI-powered AQI responses using LLMs |
 | GET | `/search/semantic?q=air quality` | Search relevant AQI document chunks semantically |
 | POST | `/ask` | Generate RAG-based answers with document citations |
+| POST | `/agent` | Execute the LangGraph agent workflow |
 
 **Note:** The semantic search and RAG endpoints require a successfully built ChromaDB index.
 
@@ -554,18 +745,53 @@ This builds two separate evaluation collections, compares the retrieval configur
 AQIExplainer combines multiple AI and information-retrieval techniques:
 
 1. **Traditional Search:** TF-IDF vectorization and cosine similarity are used to rank matching AQI records.
-2. **LLM Integration:** Groq and Google Gemini APIs are integrated for natural-language AQI question answering.
-3. **Document Processing:** PDF, CSV and JSON documents are extracted and divided into overlapping chunks.
-4. **Embedding-Based Retrieval:** ChromaDB stores document embeddings and supports semantic retrieval.
-5. **Retrieval-Augmented Generation:** Retrieved document chunks are passed as context to an LLM to generate grounded answers.
-6. **Source-Based Citations:** RAG responses include references to retrieved document sources.
-7. **Retrieval Evaluation:** A 15-question evaluation dataset compares different chunking and top-k configurations using keyword hit rate and mean similarity.
 
-The current evaluation selected Configuration A (900-character chunks, 150-character overlap and top-k 3), based on its higher mean similarity score while maintaining a 100% keyword-based retrieval hit rate.
+2. **LLM Integration:** Groq and Google Gemini APIs are integrated for natural-language AQI question answering.
+
+3. **Document Processing:** PDF, CSV and JSON documents are extracted and divided into overlapping chunks.
+
+4. **Embedding-Based Retrieval:** ChromaDB stores document embeddings and supports semantic retrieval.
+
+5. **Retrieval-Augmented Generation:** Retrieved document chunks are passed as context to an LLM to generate grounded answers.
+
+6. **Source-Based Citations:** RAG responses include references to retrieved document sources.
+
+7. **Retrieval Evaluation:** A 15-question evaluation dataset compares different chunking and top-k configurations using keyword hit rate, Precision@K, Recall@K, MRR and mean similarity.
+
+8. **AQI Calculation:** Pollutant concentrations are processed using breakpoint interpolation to calculate sub-indices and overall AQI.
+
+9. **Agent Workflow:** A rule-based agent and LangGraph workflow route requests to RAG or the AQI calculator, with human approval before calculator execution.
+
+10. **Conversational Interface:** Streamlit provides a chat interface connected to FastAPI, with source citations, feedback collection and AQI category visualization.
+
+The initial retrieval experiment selected Configuration A (900-character chunks, 150-character overlap and top-k 3) based on its higher mean similarity score while maintaining a 100% keyword-based retrieval hit rate.
+
+The Day 10 evaluation also compared Precision@K, Recall@K and MRR. Configuration A performed better in precision-oriented metrics, while Configuration B achieved slightly higher recall.
 
 The project is being developed incrementally, with each stage building on the previous implementation.
 
-## 14. Future Enhancements
+## 14. Checkpoint 2 – AQIExplainer Live Demo
+
+Checkpoint 2 introduces the interactive Streamlit frontend connected to the FastAPI backend.
+
+### Implemented Features
+
+- Conversational AQI question answering.
+- RAG-based document retrieval through `/ask`.
+- LangGraph agent workflow through `/agent`.
+- AQI calculator with human approval.
+- Source citations displayed with answers.
+- Conversation history using Streamlit session state.
+- Thumbs-up and thumbs-down feedback.
+- Local feedback storage in JSONL format.
+- Six-band CPCB AQI colour indicator.
+- CPCB category-based health-impact statements.
+
+### Demo Screenshot
+
+![AQIExplainer Checkpoint 2](docs/checkpoint-2.png)
+
+## 15. Future Enhancements
 
 - Improve semantic retrieval accuracy and relevance evaluation.
 - Introduce stronger answer-quality evaluation beyond keyword matching.
@@ -573,11 +799,38 @@ The project is being developed incrementally, with each stage building on the pr
 - Add more historical AQI datasets.
 - Improve citation selection and source verification.
 - Add confidence-based retrieval and abstention improvements.
-- Develop an interactive frontend.
+- Improve agent decision-making and tool selection.
+- Add persistent conversation storage.
 - Expand AQI coverage to more cities and locations.
+- Add interactive AQI trend visualizations.
 - Add more AQI-related datasets and document sources.
 
-## 15. Author
+## 16. Learning Outcomes
 
-- **Name:** Vedika
-- **Project:** AQIExplainer
+During this 10-day development journey, the project involved practical implementation and understanding of:
+
+- Python programming and modular development.
+- Data collection, cleaning and preprocessing.
+- FastAPI and REST API development.
+- Pandas and Scikit-learn.
+- TF-IDF and cosine similarity.
+- Large Language Model integration.
+- Groq and Gemini API integration.
+- Prompt engineering.
+- Document extraction and text chunking.
+- Embeddings and ChromaDB.
+- Semantic search and RAG.
+- AQI calculation and pollutant sub-indices.
+- Rule-based agents and LangGraph.
+- Human-in-the-loop workflows.
+- Retrieval evaluation and A/B testing.
+- Precision@K, Recall@K and MRR.
+- Streamlit conversational application development.
+- Session state and feedback collection.
+- Git and GitHub version control.
+
+## 17. Author
+
+**Name:** Vedika
+**Project:** AQIExplainer
+**GitHub Repository:** [Gen-AI-Examate](https://github.com/VedikaTaji/Gen-AI-Examate)
