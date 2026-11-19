@@ -1,10 +1,8 @@
-
 # ==========================================
 # AQIExplainer - Maharashtra AQI Dataset
 # ==========================================
 
 SAMPLE_RECORDS = [
-
     {
         "id": 1,
         "city": "Amravati",
@@ -12,9 +10,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 80,
         "aqi_category": "Satisfactory",
         "prominent_pollutant": "PM10",
-        "stations_reporting": "2/2"
+        "stations_reporting": "2/2",
     },
-
     {
         "id": 2,
         "city": "Aurangabad (Maharashtra)",
@@ -22,9 +19,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 82,
         "aqi_category": "Satisfactory",
         "prominent_pollutant": "PM2.5, O3",
-        "stations_reporting": "2/3"
+        "stations_reporting": "2/3",
     },
-
     {
         "id": 3,
         "city": "Badlapur",
@@ -32,9 +28,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 83,
         "aqi_category": "Satisfactory",
         "prominent_pollutant": "PM10",
-        "stations_reporting": "1/1"
+        "stations_reporting": "1/1",
     },
-
     {
         "id": 4,
         "city": "Bhiwandi",
@@ -42,9 +37,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 106,
         "aqi_category": "Moderate",
         "prominent_pollutant": "PM10",
-        "stations_reporting": "1/1"
+        "stations_reporting": "1/1",
     },
-
     {
         "id": 5,
         "city": "Chandrapur",
@@ -52,9 +46,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 130,
         "aqi_category": "Moderate",
         "prominent_pollutant": "PM10",
-        "stations_reporting": "2/2"
+        "stations_reporting": "2/2",
     },
-
     {
         "id": 6,
         "city": "Dhule",
@@ -62,9 +55,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 97,
         "aqi_category": "Satisfactory",
         "prominent_pollutant": "PM10",
-        "stations_reporting": "1/1"
+        "stations_reporting": "1/1",
     },
-
     {
         "id": 7,
         "city": "Jalgaon",
@@ -72,9 +64,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 118,
         "aqi_category": "Moderate",
         "prominent_pollutant": "PM10",
-        "stations_reporting": "1/1"
+        "stations_reporting": "1/1",
     },
-
     {
         "id": 8,
         "city": "Kolhapur",
@@ -82,9 +73,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 54,
         "aqi_category": "Satisfactory",
         "prominent_pollutant": "PM10",
-        "stations_reporting": "1/2"
+        "stations_reporting": "1/2",
     },
-
     {
         "id": 9,
         "city": "Latur",
@@ -92,9 +82,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 56,
         "aqi_category": "Satisfactory",
         "prominent_pollutant": "O3",
-        "stations_reporting": "1/1"
+        "stations_reporting": "1/1",
     },
-
     {
         "id": 10,
         "city": "Nagpur",
@@ -102,9 +91,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 74,
         "aqi_category": "Satisfactory",
         "prominent_pollutant": "PM10, O3",
-        "stations_reporting": "3/4"
+        "stations_reporting": "3/4",
     },
-
     {
         "id": 11,
         "city": "Nashik",
@@ -112,9 +100,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 71,
         "aqi_category": "Satisfactory",
         "prominent_pollutant": "PM10",
-        "stations_reporting": "4/4"
+        "stations_reporting": "4/4",
     },
-
     {
         "id": 12,
         "city": "Navi Mumbai",
@@ -122,9 +109,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 95,
         "aqi_category": "Satisfactory",
         "prominent_pollutant": "PM2.5, PM10",
-        "stations_reporting": "5/8"
+        "stations_reporting": "5/8",
     },
-
     {
         "id": 13,
         "city": "Sangli",
@@ -132,9 +118,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 67,
         "aqi_category": "Satisfactory",
         "prominent_pollutant": "PM10",
-        "stations_reporting": "1/1"
+        "stations_reporting": "1/1",
     },
-
     {
         "id": 14,
         "city": "Solapur",
@@ -142,9 +127,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 61,
         "aqi_category": "Satisfactory",
         "prominent_pollutant": "PM10",
-        "stations_reporting": "2/3"
+        "stations_reporting": "2/3",
     },
-
     {
         "id": 15,
         "city": "Thane",
@@ -152,9 +136,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 86,
         "aqi_category": "Satisfactory",
         "prominent_pollutant": "PM10",
-        "stations_reporting": "2/2"
+        "stations_reporting": "2/2",
     },
-
     {
         "id": 16,
         "city": "Mumbai",
@@ -162,9 +145,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 96,
         "aqi_category": "Satisfactory",
         "prominent_pollutant": "PM10",
-        "stations_reporting": "26/30"
+        "stations_reporting": "26/30",
     },
-
     {
         "id": 17,
         "city": "Pune",
@@ -172,9 +154,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 88,
         "aqi_category": "Satisfactory",
         "prominent_pollutant": "PM10",
-        "stations_reporting": "7/13"
+        "stations_reporting": "7/13",
     },
-
     {
         "id": 18,
         "city": "Ahmednagar",
@@ -182,9 +163,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 55,
         "aqi_category": "Satisfactory",
         "prominent_pollutant": "PM10",
-        "stations_reporting": "1/1"
+        "stations_reporting": "1/1",
     },
-
     {
         "id": 19,
         "city": "Akola",
@@ -192,9 +172,8 @@ SAMPLE_RECORDS = [
         "aqi_value": 68,
         "aqi_category": "Satisfactory",
         "prominent_pollutant": "PM10",
-        "stations_reporting": "1/1"
+        "stations_reporting": "1/1",
     },
-
     {
         "id": 20,
         "city": "Malegaon",
@@ -202,7 +181,6 @@ SAMPLE_RECORDS = [
         "aqi_value": 74,
         "aqi_category": "Satisfactory",
         "prominent_pollutant": "PM10",
-        "stations_reporting": "1/1"
-    }
-
+        "stations_reporting": "1/1",
+    },
 ]

@@ -1,11 +1,10 @@
-
 from pathlib import Path
 
 import chromadb
+from chromadb.errors import NotFoundError
 
 from app.chunking import load_all_chunks
 from app.embed import get_embedding_function, semantic_search
-
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 CHROMA_DIR = BASE_DIR / "data" / "chroma"
@@ -16,9 +15,7 @@ def get_client():
     """Create a persistent ChromaDB client."""
     CHROMA_DIR.mkdir(parents=True, exist_ok=True)
 
-    return chromadb.PersistentClient(
-        path=str(CHROMA_DIR)
-    )
+    return chromadb.PersistentClient(path=str(CHROMA_DIR))
 
 
 def get_collection(collection_name=COLLECTION_NAME):
@@ -28,15 +25,11 @@ def get_collection(collection_name=COLLECTION_NAME):
     return client.get_or_create_collection(
         name=collection_name,
         embedding_function=get_embedding_function(),
-        metadata={"hnsw:space": "cosine"}
+        metadata={"hnsw:space": "cosine"},
     )
 
 
-def build_index(
-    chunk_size=900,
-    overlap=150,
-    collection_name=COLLECTION_NAME
-):
+def build_index(chunk_size=900, overlap=150, collection_name=COLLECTION_NAME):
     """Chunk, embed and store documents in a named collection."""
     client = get_client()
 
@@ -44,20 +37,17 @@ def build_index(
     try:
         client.delete_collection(name=collection_name)
         print(f"Previous collection deleted: {collection_name}")
-    except Exception:
+    except NotFoundError:
         print(f"No previous collection found: {collection_name}")
 
     collection = client.create_collection(
         name=collection_name,
         embedding_function=get_embedding_function(),
-        metadata={"hnsw:space": "cosine"}
+        metadata={"hnsw:space": "cosine"},
     )
 
     # Generate chunks using the selected configuration.
-    chunks = load_all_chunks(
-        chunk_size=chunk_size,
-        overlap=overlap
-    )
+    chunks = load_all_chunks(chunk_size=chunk_size, overlap=overlap)
 
     if not chunks:
         print("No document chunks found. Nothing to index.")
@@ -76,7 +66,7 @@ def build_index(
         collection.add(
             ids=ids[start:end],
             documents=documents[start:end],
-            metadatas=metadatas[start:end]
+            metadatas=metadatas[start:end],
         )
 
         print(f"Indexed {min(end, len(chunks))}/{len(chunks)} chunks")
@@ -90,19 +80,11 @@ def build_index(
     return collection.count()
 
 
-def search_chunks(
-    question,
-    top_k=5,
-    collection_name=COLLECTION_NAME
-):
+def search_chunks(question, top_k=5, collection_name=COLLECTION_NAME):
     """Search a selected collection semantically."""
     collection = get_collection(collection_name)
 
-    return semantic_search(
-        collection=collection,
-        question=question,
-        top_k=top_k
-    )
+    return semantic_search(collection=collection, question=question, top_k=top_k)
 
 
 if __name__ == "__main__":

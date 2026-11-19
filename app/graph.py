@@ -1,21 +1,20 @@
-
 import json
 from typing import Annotated, TypedDict
 
-from langchain_core.messages import HumanMessage, AIMessage
-from langgraph.graph import StateGraph, START, END
-from langgraph.graph.message import add_messages
+from langchain_core.messages import AIMessage, HumanMessage
 from langgraph.checkpoint.memory import MemorySaver
-from langgraph.types import interrupt, Command
+from langgraph.graph import END, START, StateGraph
+from langgraph.graph.message import add_messages
+from langgraph.types import Command, interrupt
 
 from app.agent_loop import extract_pollutants
 from app.rag import answer_with_rag
 from app.tools import aqi_subindex_calculator
 
-
 # --------------------------------------------------
 # 1. DEFINE AGENT STATE
 # --------------------------------------------------
+
 
 class AgentState(TypedDict, total=False):
     question: str
@@ -30,6 +29,7 @@ class AgentState(TypedDict, total=False):
 # 2. ROUTE NODE
 # --------------------------------------------------
 
+
 def route_node(state: AgentState):
 
     question = state["question"]
@@ -37,46 +37,39 @@ def route_node(state: AgentState):
     pollutants = extract_pollutants(question)
 
     if pollutants:
-        return {
-            "selected_tool": "aqi_subindex_calculator",
-            "pollutants": pollutants
-        }
+        return {"selected_tool": "aqi_subindex_calculator", "pollutants": pollutants}
 
-    return {
-        "selected_tool": "rag_search"
-    }
+    return {"selected_tool": "rag_search"}
 
 
 # --------------------------------------------------
 # 3. HUMAN APPROVAL NODE
 # --------------------------------------------------
 
+
 def approval_node(state: AgentState):
 
-    decision = interrupt({
-        "message": "Approval required to execute AQI calculator.",
-        "tool": "aqi_subindex_calculator",
-        "pollutants": state["pollutants"],
-        "question": state["question"],
-        "instruction": "Approve or reject this calculation."
-    })
-
-    approved = (
-        decision is True
-        or (
-            isinstance(decision, dict)
-            and decision.get("approved") is True
-        )
+    decision = interrupt(
+        {
+            "message": "Approval required to execute AQI calculator.",
+            "tool": "aqi_subindex_calculator",
+            "pollutants": state["pollutants"],
+            "question": state["question"],
+            "instruction": "Approve or reject this calculation.",
+        }
     )
 
-    return {
-        "approval_status": "approved" if approved else "rejected"
-    }
+    approved = decision is True or (
+        isinstance(decision, dict) and decision.get("approved") is True
+    )
+
+    return {"approval_status": "approved" if approved else "rejected"}
 
 
 # --------------------------------------------------
 # 4. CALCULATOR NODE
 # --------------------------------------------------
+
 
 def calculator_node(state: AgentState):
 
@@ -85,65 +78,50 @@ def calculator_node(state: AgentState):
     response = {
         "agent": "LangGraph AQI Agent",
         "selected_tool": "aqi_subindex_calculator",
-        "result": result
+        "result": result,
     }
 
-    return {
-        "response": response,
-        "messages": [
-            AIMessage(content=json.dumps(response))
-        ]
-    }
+    return {"response": response, "messages": [AIMessage(content=json.dumps(response))]}
 
 
 # --------------------------------------------------
 # 5. RAG NODE
 # --------------------------------------------------
 
+
 def rag_node(state: AgentState):
 
-    result = answer_with_rag(
-        question=state["question"],
-        top_k=5
-    )
+    result = answer_with_rag(question=state["question"], top_k=5)
 
     response = {
         "agent": "LangGraph AQI Agent",
         "selected_tool": "rag_search",
-        "result": result
+        "result": result,
     }
 
-    return {
-        "response": response,
-        "messages": [
-            AIMessage(content=json.dumps(response))
-        ]
-    }
+    return {"response": response, "messages": [AIMessage(content=json.dumps(response))]}
 
 
 # --------------------------------------------------
 # 6. REJECTION NODE
 # --------------------------------------------------
 
+
 def rejected_node(state: AgentState):
 
     response = {
         "agent": "LangGraph AQI Agent",
         "status": "rejected",
-        "message": "The AQI calculation was not approved."
+        "message": "The AQI calculation was not approved.",
     }
 
-    return {
-        "response": response,
-        "messages": [
-            AIMessage(content=json.dumps(response))
-        ]
-    }
+    return {"response": response, "messages": [AIMessage(content=json.dumps(response))]}
 
 
 # --------------------------------------------------
 # 7. CONDITIONAL ROUTING
 # --------------------------------------------------
+
 
 def select_tool(state: AgentState):
 
@@ -176,21 +154,11 @@ builder.add_node("rejected", rejected_node)
 builder.add_edge(START, "route")
 
 builder.add_conditional_edges(
-    "route",
-    select_tool,
-    {
-        "approval": "approval",
-        "rag": "rag"
-    }
+    "route", select_tool, {"approval": "approval", "rag": "rag"}
 )
 
 builder.add_conditional_edges(
-    "approval",
-    check_approval,
-    {
-        "calculate": "calculate",
-        "rejected": "rejected"
-    }
+    "approval", check_approval, {"calculate": "calculate", "rejected": "rejected"}
 )
 
 builder.add_edge("calculate", END)
@@ -211,64 +179,39 @@ agent_graph = builder.compile(checkpointer=memory)
 # 10. GRAPH EXECUTION FUNCTION
 # --------------------------------------------------
 
-def run_agent_graph(
-    question=None,
-    thread_id="default",
-    approval=None
-):
+
+def run_agent_graph(question=None, thread_id="default", approval=None):
 
     if not thread_id or not thread_id.strip():
         raise ValueError("thread_id cannot be empty.")
 
-    config = {
-        "configurable": {
-            "thread_id": thread_id
-        }
-    }
+    config = {"configurable": {"thread_id": thread_id}}
 
     # First request: start a new graph invocation.
     if approval is None:
-
         if not question or not question.strip():
             raise ValueError("Question cannot be empty.")
 
         question = question.strip()
 
-        inputs = {
-            "question": question,
-            "messages": [
-                HumanMessage(content=question)
-            ]
-        }
+        inputs = {"question": question, "messages": [HumanMessage(content=question)]}
 
-        result = agent_graph.invoke(
-            inputs,
-            config=config
-        )
+        result = agent_graph.invoke(inputs, config=config)
 
     # Second request: resume after approval/rejection.
     else:
-
         result = agent_graph.invoke(
-            Command(
-                resume={
-                    "approved": approval
-                }
-            ),
-            config=config
+            Command(resume={"approved": approval}), config=config
         )
 
     # Check if graph is waiting for approval.
     if "__interrupt__" in result:
-
         pending = result["__interrupt__"]
 
         return {
             "status": "approval_required",
             "thread_id": thread_id,
-            "approval_request": [
-                item.value for item in pending
-            ]
+            "approval_request": [item.value for item in pending],
         }
 
     # Completed response.
@@ -278,9 +221,7 @@ def run_agent_graph(
         "status": "completed",
         "thread_id": thread_id,
         "result": result.get("response"),
-        "memory": {
-            "message_count": len(messages)
-        }
+        "memory": {"message_count": len(messages)},
     }
 
 
@@ -289,14 +230,10 @@ def run_agent_graph(
 # --------------------------------------------------
 
 if __name__ == "__main__":
-
     print("\nTEST 1: RAG through LangGraph")
 
     print(
-        run_agent_graph(
-            question="What is the Air Quality Index?",
-            thread_id="rag-test"
-        )
+        run_agent_graph(question="What is the Air Quality Index?", thread_id="rag-test")
     )
 
     print("\nTEST 2: Calculator approval request")
@@ -304,15 +241,10 @@ if __name__ == "__main__":
     print(
         run_agent_graph(
             question="Calculate AQI for PM2.5 45 and PM10 80",
-            thread_id="calculator-test"
+            thread_id="calculator-test",
         )
     )
 
     print("\nTEST 3: Approve calculator execution")
 
-    print(
-        run_agent_graph(
-            thread_id="calculator-test",
-            approval=True
-        )
-    )
+    print(run_agent_graph(thread_id="calculator-test", approval=True))

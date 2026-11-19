@@ -8,3 +8,6 @@ chromadb
 pypdf
 langgraph
 streamlit
+pytest
+httpx
+ruff

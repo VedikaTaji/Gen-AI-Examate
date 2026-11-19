@@ -1,9 +1,7 @@
-
 import json
 from pathlib import Path
 
 from app.vectorstore import build_index, search_chunks
-
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 EVAL_FILE = BASE_DIR / "eval" / "eval_set.json"
@@ -17,15 +15,15 @@ CONFIGURATIONS = [
         "chunk_size": 900,
         "overlap": 150,
         "top_k": 3,
-        "collection_name": "aqi_eval_a"
+        "collection_name": "aqi_eval_a",
     },
     {
         "name": "Configuration B",
         "chunk_size": 500,
         "overlap": 100,
         "top_k": 5,
-        "collection_name": "aqi_eval_b"
-    }
+        "collection_name": "aqi_eval_b",
+    },
 ]
 
 
@@ -45,7 +43,7 @@ def evaluate_configuration(config, questions):
     build_index(
         chunk_size=config["chunk_size"],
         overlap=config["overlap"],
-        collection_name=config["collection_name"]
+        collection_name=config["collection_name"],
     )
 
     question_results = []
@@ -65,20 +63,17 @@ def evaluate_configuration(config, questions):
         hits = search_chunks(
             question=question,
             top_k=config["top_k"],
-            collection_name=config["collection_name"]
+            collection_name=config["collection_name"],
         )
 
-        retrieved_text = " ".join(
-            hit["text"].lower() for hit in hits
-        )
+        retrieved_text = " ".join(hit["text"].lower() for hit in hits)
 
         # Unanswerable questions are not included in retrieval hit rate.
         if answerable:
             total_answerable += 1
 
             keyword_hit = any(
-                keyword.lower() in retrieved_text
-                for keyword in expected_keywords
+                keyword.lower() in retrieved_text for keyword in expected_keywords
             )
 
             if keyword_hit:
@@ -95,26 +90,22 @@ def evaluate_configuration(config, questions):
         print("Retrieved chunks:", len(hits))
         print("Evaluation:", status)
 
-        question_results.append({
-            "id": question_id,
-            "question": question,
-            "answerable": answerable,
-            "retrieved_chunks": len(hits),
-            "keyword_hit": keyword_hit,
-            "status": status,
-            "sources": [
-                hit["source"] for hit in hits
-            ]
-        })
+        question_results.append(
+            {
+                "id": question_id,
+                "question": question,
+                "answerable": answerable,
+                "retrieved_chunks": len(hits),
+                "keyword_hit": keyword_hit,
+                "status": status,
+                "sources": [hit["source"] for hit in hits],
+            }
+        )
 
-    hit_rate = (
-        total_hits / total_answerable * 100
-        if total_answerable else 0
-    )
+    hit_rate = total_hits / total_answerable * 100 if total_answerable else 0
 
     mean_similarity = (
-        sum(similarity_scores) / len(similarity_scores)
-        if similarity_scores else 0
+        sum(similarity_scores) / len(similarity_scores) if similarity_scores else 0
     )
 
     summary = {
@@ -128,7 +119,7 @@ def evaluate_configuration(config, questions):
         "keyword_hits": total_hits,
         "hit_rate_percent": round(hit_rate, 2),
         "mean_similarity": round(mean_similarity, 4),
-        "question_results": question_results
+        "question_results": question_results,
     }
 
     print("\nConfiguration summary:")
@@ -141,10 +132,7 @@ def evaluate_configuration(config, questions):
 
 def save_results(results):
     """Save evaluation results as JSON and Markdown."""
-    RESULTS_JSON.write_text(
-        json.dumps(results, indent=4),
-        encoding="utf-8"
-    )
+    RESULTS_JSON.write_text(json.dumps(results, indent=4), encoding="utf-8")
 
     lines = [
         "# AQIExplainer Retrieval Evaluation",
@@ -152,7 +140,7 @@ def save_results(results):
         "## Configuration Comparison",
         "",
         "| Configuration | Chunk Size | Overlap | Top-k | Keyword Hits | Hit Rate | Mean Similarity |",
-        "|---|---:|---:|---:|---:|---:|---:|"
+        "|---|---:|---:|---:|---:|---:|---:|",
     ]
 
     for result in results["configurations"]:
@@ -166,30 +154,29 @@ def save_results(results):
             f"| {result['mean_similarity']} |"
         )
 
-    lines.extend([
-        "",
-        "## Winner",
-        "",
-        f"**{results['winner']}**",
-        "",
-        "Winner selected by retrieval hit rate, with mean similarity as a tie-breaker.",
-        "",
-        "## Q6 Abstention Check",
-        "",
-        "Q6 is an unanswerable historical-data question. It is excluded from retrieval hit-rate calculations.",
-        "Verify that POST /ask returns exactly `I don't know`, with no citations and low confidence.",
-        "",
-        "## Evaluation Method",
-        "",
-        "Keyword hit rate measures whether at least one expected keyword appears in the retrieved chunks.",
-        "It is a simple retrieval relevance proxy, not a measure of answer correctness.",
-        "Mean similarity is the average similarity score of retrieved chunks for answerable questions."
-    ])
-
-    RESULTS_MD.write_text(
-        "\n".join(lines),
-        encoding="utf-8"
+    lines.extend(
+        [
+            "",
+            "## Winner",
+            "",
+            f"**{results['winner']}**",
+            "",
+            "Winner selected by retrieval hit rate, with mean similarity as a tie-breaker.",
+            "",
+            "## Q6 Abstention Check",
+            "",
+            "Q6 is an unanswerable historical-data question. It is excluded from retrieval hit-rate calculations.",
+            "Verify that POST /ask returns exactly `I don't know`, with no citations and low confidence.",
+            "",
+            "## Evaluation Method",
+            "",
+            "Keyword hit rate measures whether at least one expected keyword appears in the retrieved chunks.",
+            "It is a simple retrieval relevance proxy, not a measure of answer correctness.",
+            "Mean similarity is the average similarity score of retrieved chunks for answerable questions.",
+        ]
     )
+
+    RESULTS_MD.write_text("\n".join(lines), encoding="utf-8")
 
     print("\nEvaluation reports saved:")
     print(RESULTS_JSON)
@@ -202,9 +189,7 @@ def main():
     print("Total evaluation questions:", len(questions))
 
     if len(questions) != 15:
-        raise ValueError(
-            f"Expected exactly 15 questions, found {len(questions)}."
-        )
+        raise ValueError(f"Expected exactly 15 questions, found {len(questions)}.")
 
     results = []
 
@@ -214,17 +199,10 @@ def main():
 
     # Select winner by hit rate, then mean similarity.
     winner = max(
-        results,
-        key=lambda item: (
-            item["hit_rate_percent"],
-            item["mean_similarity"]
-        )
+        results, key=lambda item: (item["hit_rate_percent"], item["mean_similarity"])
     )
 
-    final_results = {
-        "winner": winner["name"],
-        "configurations": results
-    }
+    final_results = {"winner": winner["name"], "configurations": results}
 
     save_results(final_results)
 

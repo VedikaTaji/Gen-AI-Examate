@@ -1,11 +1,9 @@
-
 import json
 import os
 from pathlib import Path
 
 import requests
 from dotenv import load_dotenv
-
 
 # Project paths
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -43,7 +41,7 @@ def parse_response(response_text):
         return {
             "answer": str(result["answer"]),
             "confidence": confidence,
-            "follow_up": str(result["follow_up"])
+            "follow_up": str(result["follow_up"]),
         }
 
     except (json.JSONDecodeError, TypeError) as error:
@@ -61,28 +59,20 @@ def call_groq(system_prompt, user_prompt):
 
     url = "https://api.groq.com/openai/v1/chat/completions"
 
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }
+    headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
 
     payload = {
         "model": model,
         "messages": [
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt}
+            {"role": "user", "content": user_prompt},
         ],
         "response_format": {"type": "json_object"},
         "temperature": 0.2,
-        "max_completion_tokens": 500
+        "max_completion_tokens": 500,
     }
 
-    response = requests.post(
-        url,
-        headers=headers,
-        json=payload,
-        timeout=45
-    )
+    response = requests.post(url, headers=headers, json=payload, timeout=45)
 
     if not response.ok:
         print("\nGROQ API ERROR:")
@@ -110,33 +100,19 @@ def call_gemini(system_prompt, user_prompt):
         f"models/{model}:generateContent"
     )
 
-    headers = {
-        "x-goog-api-key": api_key,
-        "Content-Type": "application/json"
-    }
+    headers = {"x-goog-api-key": api_key, "Content-Type": "application/json"}
 
     payload = {
-        "systemInstruction": {
-            "parts": [{"text": system_prompt}]
-        },
-        "contents": [
-            {
-                "parts": [{"text": user_prompt}]
-            }
-        ],
+        "systemInstruction": {"parts": [{"text": system_prompt}]},
+        "contents": [{"parts": [{"text": user_prompt}]}],
         "generationConfig": {
             "temperature": 0.2,
             "responseMimeType": "application/json",
-            "maxOutputTokens": 500
-        }
+            "maxOutputTokens": 500,
+        },
     }
 
-    response = requests.post(
-        url,
-        headers=headers,
-        json=payload,
-        timeout=45
-    )
+    response = requests.post(url, headers=headers, json=payload, timeout=45)
 
     response.raise_for_status()
 
@@ -180,13 +156,9 @@ Remember: return valid JSON only.
             raw_response = call_gemini(system_prompt, user_prompt)
 
         else:
-            raise ValueError(
-                "Invalid LLM_PROVIDER. Choose groq or gemini."
-            )
+            raise ValueError("Invalid LLM_PROVIDER. Choose groq or gemini.")
 
         return parse_response(raw_response)
 
     except requests.RequestException as error:
-        raise RuntimeError(
-            f"{provider} API request failed: {error}"
-        ) from error
+        raise RuntimeError(f"{provider} API request failed: {error}") from error

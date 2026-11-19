@@ -1,7 +1,8 @@
-from app.records import load_records, search, count_by, get_by_id
+from app.records import count_by, get_by_id, load_records, search
 
 # Load records
 records = load_records()
+
 
 # Display all records
 def show_all():
@@ -9,16 +10,18 @@ def show_all():
     for record in records:
         print(record)
 
+
 # Search records
 def search_records():
     keyword = input("\nEnter city/category/pollutant: ")
     results = search(records, keyword)
-    
+
     if results:
         for record in results:
             print(record)
     else:
         print("No matching records found.")
+
 
 # Count records by category
 def show_count():
@@ -26,6 +29,7 @@ def show_count():
     print("\n===== AQI CATEGORY COUNT =====")
     for category, total in counts.items():
         print(f"{category}: {total}")
+
 
 # Find record by ID
 def find_record():
@@ -41,9 +45,9 @@ def find_record():
     except ValueError:
         print("Please enter a valid number.")
 
+
 # Main menu
 while True:
-
     print("\n====== AQIEXPLAINER ======")
     print("1. Display all records")
     print("2. Search records")

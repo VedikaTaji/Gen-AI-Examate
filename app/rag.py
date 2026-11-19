@@ -2,8 +2,8 @@ import json
 import os
 
 from app.embed import semantic_search
+from app.llm import call_gemini, call_groq
 from app.vectorstore import get_collection
-from app.llm import call_groq, call_gemini
 
 
 def retrieve_context(question, top_k=5):
@@ -11,22 +11,14 @@ def retrieve_context(question, top_k=5):
 
     collection = get_collection()
 
-    return semantic_search(
-        collection=collection,
-        question=question,
-        top_k=top_k
-    )
+    return semantic_search(collection=collection, question=question, top_k=top_k)
 
 
 def generate_rag_answer(question, chunks):
     """Generate an answer using only retrieved document context."""
 
     if not chunks:
-        return {
-            "answer": "I don't know",
-            "citations": [],
-            "confidence": "low"
-        }
+        return {"answer": "I don't know", "citations": [], "confidence": "low"}
 
     # Prepare numbered context with source metadata.
     context_parts = []
@@ -35,10 +27,10 @@ def generate_rag_answer(question, chunks):
         context_parts.append(
             f"""
 SOURCE [{index}]
-Title: {chunk.get('title', 'Unknown')}
-Source: {chunk.get('source', 'Unknown')}
-Page/Row: {chunk.get('page', 'Unknown')}
-Content: {chunk.get('text', '')}
+Title: {chunk.get("title", "Unknown")}
+Source: {chunk.get("source", "Unknown")}
+Page/Row: {chunk.get("page", "Unknown")}
+Content: {chunk.get("text", "")}
 """
         )
 
@@ -101,13 +93,15 @@ Return valid JSON only.
     citations = []
 
     for index, chunk in enumerate(chunks, start=1):
-        citations.append({
-            "reference": index,
-            "title": chunk.get("title", ""),
-            "source": chunk.get("source", ""),
-            "page": chunk.get("page", ""),
-            "similarity": chunk.get("similarity", 0)
-        })
+        citations.append(
+            {
+                "reference": index,
+                "title": chunk.get("title", ""),
+                "source": chunk.get("source", ""),
+                "page": chunk.get("page", ""),
+                "similarity": chunk.get("similarity", 0),
+            }
+        )
 
     # Enforce the no-answer requirement for missing 30-day history.
     question_lower = question.lower()
@@ -123,11 +117,7 @@ Return valid JSON only.
         confidence = "low"
         citations = []
 
-    return {
-        "answer": answer,
-        "citations": citations,
-        "confidence": confidence
-    }
+    return {"answer": answer, "citations": citations, "confidence": confidence}
 
 
 def answer_with_rag(question, top_k=5):
@@ -147,5 +137,5 @@ def answer_with_rag(question, top_k=5):
         "answer": result["answer"],
         "citations": result["citations"],
         "confidence": result["confidence"],
-        "retrieved_chunks": len(chunks)
+        "retrieved_chunks": len(chunks),
     }

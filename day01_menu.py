@@ -1,5 +1,4 @@
 while True:
-
     print("\n========== AQIEXPLAINER MENU ==========")
 
     print("1. About AQIExplainer")
@@ -12,13 +11,11 @@ while True:
     choice = input("\nEnter your choice: ")
 
     if choice == "1":
-
         print("\nAQIExplainer is an Air Quality Information System.")
         print("It helps users understand air pollution")
         print("levels across Maharashtra cities.")
 
     elif choice == "2":
-
         print("\nSample Questions:")
 
         print("1. What is the AQI of Nagpur?")
@@ -27,7 +24,6 @@ while True:
         print("4. What does Severe AQI mean?")
 
     elif choice == "3":
-
         try:
             aqi = int(input("\nEnter AQI value (0-500): "))
 
@@ -56,11 +52,9 @@ while True:
             print("Please enter a valid whole number.")
 
     elif choice == "0":
-
         print("\nThank you for using AQIExplainer!")
 
         break
 
     else:
-
         print("\nInvalid choice. Please select again.")

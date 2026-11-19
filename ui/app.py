@@ -7,7 +7,6 @@ from pathlib import Path
 import requests
 import streamlit as st
 
-
 # ---------------- CONFIGURATION ----------------
 
 st.set_page_config(
@@ -129,6 +128,7 @@ def extract_city(question):
 
 # ---------------- API RESPONSE HELPERS ----------------
 
+
 def get_answer(data):
     """Get readable answer text from /ask or /agent response data."""
     if isinstance(data, str):
@@ -181,6 +181,7 @@ def get_citations(data):
 
 # ---------------- BACKEND REQUESTS ----------------
 
+
 def call_backend(question, mode, thread_id):
     if mode == "RAG (/ask)":
         endpoint = f"{API_URL}/ask"
@@ -213,6 +214,7 @@ def resume_agent(thread_id, approved):
 
 # ---------------- FEEDBACK ----------------
 
+
 def save_feedback(question, answer, rating):
     record = {
         "timestamp": datetime.now().isoformat(timespec="seconds"),
@@ -229,6 +231,7 @@ def save_feedback(question, answer, rating):
 
 # ---------------- AQI DISPLAY ----------------
 
+
 def show_aqi_card(question, answer):
     value = extract_aqi(answer)
 
@@ -244,8 +247,8 @@ def show_aqi_card(question, answer):
     st.markdown(
         f"""
         <div style="
-            background-color: {band['color']};
-            color: {band['text_color']};
+            background-color: {band["color"]};
+            color: {band["text_color"]};
             padding: 18px;
             border-radius: 12px;
             margin: 12px 0;
@@ -257,10 +260,10 @@ def show_aqi_card(question, answer):
                 AQI {value}
             </div>
             <div style="font-size: 20px; font-weight: 700;">
-                {band['name']}
+                {band["name"]}
             </div>
             <div style="font-size: 14px; margin-top: 8px;">
-                {band['health']}
+                {band["health"]}
             </div>
         </div>
         """,
@@ -319,12 +322,12 @@ with st.sidebar:
                 <div style="
                     width:18px;
                     height:18px;
-                    background:{band['color']};
+                    background:{band["color"]};
                     border:1px solid #888;
                     border-radius:4px;
                     margin-right:10px;">
                 </div>
-                <span>{band['name']} ({band['minimum']}-{band['maximum']})</span>
+                <span>{band["name"]} ({band["minimum"]}-{band["maximum"]})</span>
             </div>
             """,
             unsafe_allow_html=True,
@@ -371,9 +374,7 @@ for index, message in enumerate(st.session_state.messages):
                             )
                             message["content"] = get_answer(result)
                             message["citations"] = get_citations(result)
-                            message["status"] = result.get(
-                                "status", "completed"
-                            )
+                            message["status"] = result.get("status", "completed")
                             st.rerun()
                         except requests.exceptions.RequestException as error:
                             st.error(f"Approval request failed: {error}")
@@ -390,9 +391,7 @@ for index, message in enumerate(st.session_state.messages):
                             )
                             message["content"] = get_answer(result)
                             message["citations"] = get_citations(result)
-                            message["status"] = result.get(
-                                "status", "completed"
-                            )
+                            message["status"] = result.get("status", "completed")
                             st.rerun()
                         except requests.exceptions.RequestException as error:
                             st.error(f"Rejection request failed: {error}")
@@ -473,5 +472,5 @@ if question:
             "Could not connect to the FastAPI backend. "
             f"Check that the backend is running. Details: {error}"
         )
-    except Exception as error:
+    except Exception as error:  # noqa: BLE001
         st.error(f"Something went wrong: {error}")

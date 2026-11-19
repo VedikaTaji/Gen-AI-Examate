@@ -1,6 +1,4 @@
-
 import math
-
 
 # CPCB AQI concentration breakpoints.
 # Each segment: (concentration_low, concentration_high,
@@ -156,11 +154,9 @@ def calculate_subindex(pollutant, concentration):
 
         for c_low, c_high, i_low, i_high in breakpoint_data["segments"]:
             if c_low <= concentration <= c_high:
-                value = (
-                    ((i_high - i_low) / (c_high - c_low))
-                    * (concentration - c_low)
-                    + i_low
-                )
+                value = ((i_high - i_low) / (c_high - c_low)) * (
+                    concentration - c_low
+                ) + i_low
 
                 # CPCB example: PM2.5 concentration 31 gives sub-index 51.
                 subindex = math.floor(value)

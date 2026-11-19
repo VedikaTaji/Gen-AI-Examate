@@ -1,9 +1,8 @@
-
 import csv
 import json
-from pathlib import Path
-from datetime import datetime
 from dataclasses import asdict
+from datetime import datetime
+from pathlib import Path
 
 from app.models import Record
 
@@ -16,7 +15,7 @@ REQUIRED_FIELDS = [
     "aqi_value",
     "aqi_category",
     "prominent_pollutant",
-    "stations_reporting"
+    "stations_reporting",
 ]
 
 
@@ -25,21 +24,13 @@ def clean_records():
     records = []
 
     try:
-        with RAW_FILE.open(
-            "r",
-            encoding="utf-8-sig",
-            newline=""
-        ) as file:
-
+        with RAW_FILE.open("r", encoding="utf-8-sig", newline="") as file:
             # Detect comma or semicolon separator
             sample = file.read(4096)
             file.seek(0)
 
             try:
-                dialect = csv.Sniffer().sniff(
-                    sample,
-                    delimiters=",;\t"
-                )
+                dialect = csv.Sniffer().sniff(sample, delimiters=",;\t")
             except csv.Error:
                 dialect = csv.excel
 
@@ -48,22 +39,17 @@ def clean_records():
             # Clean column headings
             if reader.fieldnames:
                 reader.fieldnames = [
-                    name.strip().lower().replace(" ", "_")
-                    for name in reader.fieldnames
+                    name.strip().lower().replace(" ", "_") for name in reader.fieldnames
                 ]
 
             print("Detected CSV headings:", reader.fieldnames)
 
             if not reader.fieldnames or not all(
-                field in reader.fieldnames
-                for field in REQUIRED_FIELDS
+                field in reader.fieldnames for field in REQUIRED_FIELDS
             ):
-                raise ValueError(
-                    "CSV headings do not match required fields."
-                )
+                raise ValueError("CSV headings do not match required fields.")
 
             for row_number, row in enumerate(reader, start=2):
-
                 try:
                     record = Record(
                         city=row["city"].strip(),
@@ -71,25 +57,24 @@ def clean_records():
                         aqi_value=int(row["aqi_value"]),
                         aqi_category=row["aqi_category"].strip(),
                         prominent_pollutant=row["prominent_pollutant"].strip(),
-                        stations_reporting=row["stations_reporting"].strip()
+                        stations_reporting=row["stations_reporting"].strip(),
                     )
 
                     if not record.city:
                         raise ValueError("City is empty")
 
-                    datetime.strptime(
-                        record.bulletin_date,
-                        "%Y-%m-%d"
-                    )
+                    datetime.strptime(record.bulletin_date, "%Y-%m-%d")
 
                     if not 0 <= record.aqi_value <= 500:
                         raise ValueError("Invalid AQI value")
 
-                    if not all([
-                        record.aqi_category,
-                        record.prominent_pollutant,
-                        record.stations_reporting
-                    ]):
+                    if not all(
+                        [
+                            record.aqi_category,
+                            record.prominent_pollutant,
+                            record.stations_reporting,
+                        ]
+                    ):
                         raise ValueError("Required field is empty")
 
                     records.append(asdict(record))
@@ -97,10 +82,7 @@ def clean_records():
                 except (ValueError, TypeError, KeyError) as error:
                     print(f"Skipping row {row_number}: {error}")
 
-        OUTPUT_FILE.parent.mkdir(
-            parents=True,
-            exist_ok=True
-        )
+        OUTPUT_FILE.parent.mkdir(parents=True, exist_ok=True)
 
         with OUTPUT_FILE.open("w", encoding="utf-8") as file:
             json.dump(records, file, indent=4)

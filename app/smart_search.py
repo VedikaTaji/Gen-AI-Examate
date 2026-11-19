@@ -1,32 +1,28 @@
-
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 
 class SmartSearch:
-
     def __init__(self, records):
         self.records = records
 
         self.documents = [
-            " ".join([
-                str(record.get("city", "")),
-                str(record.get("aqi_value", "")),
-                str(record.get("aqi_category", "")),
-                str(record.get("prominent_pollutant", "")),
-                str(record.get("stations_reporting", ""))
-            ])
+            " ".join(
+                [
+                    str(record.get("city", "")),
+                    str(record.get("aqi_value", "")),
+                    str(record.get("aqi_category", "")),
+                    str(record.get("prominent_pollutant", "")),
+                    str(record.get("stations_reporting", "")),
+                ]
+            )
             for record in records
         ]
 
-        self.vectorizer = TfidfVectorizer(
-            lowercase=True,
-            ngram_range=(1, 2)
-        )
+        self.vectorizer = TfidfVectorizer(lowercase=True, ngram_range=(1, 2))
 
         self.matrix = (
-            self.vectorizer.fit_transform(self.documents)
-            if self.documents else None
+            self.vectorizer.fit_transform(self.documents) if self.documents else None
         )
 
     def search(self, query, limit=10):
@@ -36,10 +32,7 @@ class SmartSearch:
 
         query_vector = self.vectorizer.transform([query])
 
-        scores = cosine_similarity(
-            query_vector,
-            self.matrix
-        ).flatten()
+        scores = cosine_similarity(query_vector, self.matrix).flatten()
 
         ranked_indices = scores.argsort()[::-1]
 

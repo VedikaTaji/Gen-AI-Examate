@@ -1,23 +1,23 @@
-
 import json
 from pathlib import Path
-from typing import Optional
-from app.llm import generate_aqi_response
-from app.vectorstore import search_chunks
-from app.rag import answer_with_rag
+
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
-from app.smart_search import SmartSearch
-from app.graph import run_agent_graph
 
+from app.graph import run_agent_graph
+from app.llm import generate_aqi_response
+from app.rag import answer_with_rag
+from app.smart_search import SmartSearch
+from app.vectorstore import search_chunks
 
 app = FastAPI(
     title="AQIExplainer API",
     description="API for Maharashtra city-wise AQI information",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 DATA_FILE = Path("data/records.json")
+
 
 def load_records():
 
@@ -37,24 +37,30 @@ def load_records():
     except json.JSONDecodeError:
         raise RuntimeError("records.json contains invalid JSON.")
 
+
 records = load_records()
 search_engine = SmartSearch(records)
 
+
 class QuestionRequest(BaseModel):
     question: str
+
 
 class ChatRequest(BaseModel):
     question: str
     prompt_version: str = "v2"
 
+
 class AskRequest(BaseModel):
     question: str
     top_k: int = 5
+
 
 class AgentRequest(BaseModel):
     question: str = None
     thread_id: str = "default"
     approval: bool = None
+
 
 @app.get("/health")
 def health():
@@ -62,17 +68,14 @@ def health():
     return {
         "status": "healthy",
         "project": "AQIExplainer",
-        "total_records": len(records)
+        "total_records": len(records),
     }
 
 
 @app.get("/records")
 def get_records(limit: int = Query(default=20, ge=1, le=500)):
 
-    return {
-        "total": len(records),
-        "records": records[:limit]
-    }
+    return {"total": len(records), "records": records[:limit]}
 
 
 @app.get("/records/{record_id}")
@@ -82,25 +85,17 @@ def get_record(record_id: int):
         if record["id"] == record_id:
             return record
 
-    raise HTTPException(
-        status_code=404,
-        detail="AQI record not found"
-    )
+    raise HTTPException(status_code=404, detail="AQI record not found")
 
 
 @app.get("/search")
 def search_records(
-    q: str = Query(..., min_length=1),
-    limit: int = Query(default=10, ge=1, le=100)
+    q: str = Query(..., min_length=1), limit: int = Query(default=10, ge=1, le=100)
 ):
 
     results = search_engine.search(q, limit)
 
-    return {
-        "query": q,
-        "total_matches": len(results),
-        "results": results
-    }
+    return {"query": q, "total_matches": len(results), "results": results}
 
 
 @app.post("/questions")
@@ -109,10 +104,7 @@ def ask_question(request: QuestionRequest):
     question = request.question.strip().lower()
 
     if not question:
-        raise HTTPException(
-            status_code=400,
-            detail="Question cannot be empty"
-        )
+        raise HTTPException(status_code=400, detail="Question cannot be empty")
 
     if not records:
         return {"question": request.question, "answer": "No AQI data available."}
@@ -144,10 +136,8 @@ def ask_question(request: QuestionRequest):
         else:
             answer = "I could not find matching AQI information in the records."
 
-    return {
-        "question": request.question,
-        "answer": answer
-    }
+    return {"question": request.question, "answer": answer}
+
 
 @app.post("/chat")
 def chat(request: ChatRequest):
@@ -155,33 +145,22 @@ def chat(request: ChatRequest):
     question = request.question.strip()
 
     if not question:
-        raise HTTPException(
-            status_code=400,
-            detail="Question cannot be empty."
-        )
+        raise HTTPException(status_code=400, detail="Question cannot be empty.")
 
     try:
         result = generate_aqi_response(
-            question=question,
-            records=records,
-            prompt_version=request.prompt_version
+            question=question, records=records, prompt_version=request.prompt_version
         )
 
         return result
 
     except ValueError as error:
-        raise HTTPException(
-            status_code=400,
-            detail=str(error)
-        )
+        raise HTTPException(status_code=400, detail=str(error))
 
     except RuntimeError as error:
-        raise HTTPException(
-            status_code=502,
-            detail=str(error)
-        )
+        raise HTTPException(status_code=502, detail=str(error))
 
-    
+
 @app.get("/search/semantic")
 def semantic_search_endpoint(q: str, limit: int = 5):
     """Search AQI documents using semantic similarity."""
@@ -189,37 +168,22 @@ def semantic_search_endpoint(q: str, limit: int = 5):
     question = q.strip()
 
     if not question:
-        raise HTTPException(
-            status_code=400,
-            detail="Search question cannot be empty."
-        )
+        raise HTTPException(status_code=400, detail="Search question cannot be empty.")
 
     if limit < 1 or limit > 20:
-        raise HTTPException(
-            status_code=400,
-            detail="Limit must be between 1 and 20."
-        )
+        raise HTTPException(status_code=400, detail="Limit must be between 1 and 20.")
 
     try:
         results = search_chunks(question, top_k=limit)
 
-        return {
-            "query": question,
-            "total_results": len(results),
-            "results": results
-        }
+        return {"query": question, "total_results": len(results), "results": results}
 
     except ValueError as error:
-        raise HTTPException(
-            status_code=400,
-            detail=str(error)
-        )
+        raise HTTPException(status_code=400, detail=str(error))
 
-    except Exception as error:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Semantic search failed: {error}"
-        )
+    except (RuntimeError, OSError) as error:
+        raise HTTPException(status_code=500, detail=f"Semantic search failed: {error}")
+
 
 @app.post("/ask")
 def ask_with_rag(request: AskRequest):
@@ -228,67 +192,41 @@ def ask_with_rag(request: AskRequest):
     question = request.question.strip()
 
     if not question:
-        raise HTTPException(
-            status_code=400,
-            detail="Question cannot be empty."
-        )
+        raise HTTPException(status_code=400, detail="Question cannot be empty.")
 
     if request.top_k < 1 or request.top_k > 10:
-        raise HTTPException(
-            status_code=400,
-            detail="top_k must be between 1 and 10."
-        )
+        raise HTTPException(status_code=400, detail="top_k must be between 1 and 10.")
 
     try:
-        return answer_with_rag(
-            question=question,
-            top_k=request.top_k
-        )
+        return answer_with_rag(question=question, top_k=request.top_k)
 
     except ValueError as error:
-        raise HTTPException(
-            status_code=400,
-            detail=str(error)
-        )
+        raise HTTPException(status_code=400, detail=str(error))
 
-    except Exception as error:
-        raise HTTPException(
-            status_code=500,
-            detail=f"RAG request failed: {error}"
-        )
+    except (RuntimeError, OSError) as error:
+        raise HTTPException(status_code=500, detail=f"RAG request failed: {error}")
+
 
 @app.post("/agent")
 def agent_endpoint(request: AgentRequest):
 
     try:
         if not request.thread_id.strip():
-            raise HTTPException(
-                status_code=400,
-                detail="thread_id cannot be empty."
-            )
+            raise HTTPException(status_code=400, detail="thread_id cannot be empty.")
 
         if request.approval is None and not request.question:
-            raise HTTPException(
-                status_code=400,
-                detail="Question is required."
-            )
+            raise HTTPException(status_code=400, detail="Question is required.")
 
         result = run_agent_graph(
             question=request.question,
             thread_id=request.thread_id,
-            approval=request.approval
+            approval=request.approval,
         )
 
         return result
 
     except ValueError as error:
-        raise HTTPException(
-            status_code=400,
-            detail=str(error)
-        )
+        raise HTTPException(status_code=400, detail=str(error))
 
-    except Exception as error:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Agent execution failed: {error}"
-        )
+    except (RuntimeError, OSError) as error:
+        raise HTTPException(status_code=500, detail=f"Agent execution failed: {error}")

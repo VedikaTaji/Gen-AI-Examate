@@ -1,5 +1,6 @@
-import requests
 from pathlib import Path
+
+import requests
 
 RAW_FOLDER = Path("data/raw")
 RAW_FOLDER.mkdir(parents=True, exist_ok=True)
@@ -9,6 +10,7 @@ DOCUMENTS = {
     "About_AQI.pdf": "https://www.airquality.cpcb.gov.in/ccr_docs/About_AQI.pdf",
     "cpcb_ogd_resource.html": "https://www.data.gov.in/resource/real-time-air-quality-index-various-locations",
 }
+
 
 def download_documents():
     for filename, url in DOCUMENTS.items():
@@ -23,6 +25,7 @@ def download_documents():
 
         except requests.exceptions.RequestException as error:
             print(f"Could not download {filename}: {error}")
+
 
 if __name__ == "__main__":
     download_documents()

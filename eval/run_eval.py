@@ -1,9 +1,7 @@
-
 import json
 from pathlib import Path
 
 from app.vectorstore import build_index, search_chunks
-
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 EVAL_FILE = BASE_DIR / "eval" / "eval_set.json"
@@ -17,15 +15,15 @@ CONFIGURATIONS = [
         "chunk_size": 900,
         "overlap": 150,
         "top_k": 3,
-        "collection_name": "aqi_eval_a"
+        "collection_name": "aqi_eval_a",
     },
     {
         "name": "Configuration B",
         "chunk_size": 500,
         "overlap": 100,
         "top_k": 5,
-        "collection_name": "aqi_eval_b"
-    }
+        "collection_name": "aqi_eval_b",
+    },
 ]
 
 
@@ -71,7 +69,7 @@ def calculate_question_metrics(hits, keyword_groups, top_k):
             "recall_at_k": 0,
             "mrr": 0,
             "matched_groups": 0,
-            "total_groups": 0
+            "total_groups": 0,
         }
 
     matched_groups = set()
@@ -103,7 +101,7 @@ def calculate_question_metrics(hits, keyword_groups, top_k):
         "recall_at_k": round(recall, 4),
         "mrr": round(reciprocal_rank, 4),
         "matched_groups": len(matched_groups),
-        "total_groups": len(keyword_groups)
+        "total_groups": len(keyword_groups),
     }
 
 
@@ -115,7 +113,7 @@ def evaluate_configuration(config, questions):
     build_index(
         chunk_size=config["chunk_size"],
         overlap=config["overlap"],
-        collection_name=config["collection_name"]
+        collection_name=config["collection_name"],
     )
 
     question_results = []
@@ -133,23 +131,16 @@ def evaluate_configuration(config, questions):
         hits = search_chunks(
             question=question,
             top_k=config["top_k"],
-            collection_name=config["collection_name"]
+            collection_name=config["collection_name"],
         )
 
-        retrieved_text = " ".join(
-            hit["text"].lower() for hit in hits
-        )
+        retrieved_text = " ".join(hit["text"].lower() for hit in hits)
 
         if answerable:
-            metrics = calculate_question_metrics(
-                hits,
-                keyword_groups,
-                config["top_k"]
-            )
+            metrics = calculate_question_metrics(hits, keyword_groups, config["top_k"])
 
             keyword_hit = any(
-                group_matches(retrieved_text, group)
-                for group in keyword_groups
+                group_matches(retrieved_text, group) for group in keyword_groups
             )
 
             for hit in hits:
@@ -170,31 +161,32 @@ def evaluate_configuration(config, questions):
                 "recall_at_k": None,
                 "mrr": None,
                 "matched_groups": 0,
-                "total_groups": len(keyword_groups)
+                "total_groups": len(keyword_groups),
             }
             keyword_hit = None
             status = "UNANSWERABLE - abstention evaluated separately"
 
             print("Evaluation:", status)
 
-        question_results.append({
-            "id": question_id,
-            "question": question,
-            "answerable": answerable,
-            "retrieved_chunks": len(hits),
-            "keyword_hit": keyword_hit,
-            **metrics,
-            "status": status,
-            "sources": [hit["source"] for hit in hits],
-            "similarities": [
-                hit["similarity"] for hit in hits
-            ]
-        })
+        question_results.append(
+            {
+                "id": question_id,
+                "question": question,
+                "answerable": answerable,
+                "retrieved_chunks": len(hits),
+                "keyword_hit": keyword_hit,
+                **metrics,
+                "status": status,
+                "sources": [hit["source"] for hit in hits],
+                "similarities": [hit["similarity"] for hit in hits],
+            }
+        )
 
     total_answerable = len(answerable_results)
 
     keyword_hits = sum(
-        1 for result in question_results
+        1
+        for result in question_results
         if result["answerable"] and result["keyword_hit"]
     )
 
@@ -203,19 +195,13 @@ def evaluate_configuration(config, questions):
             return 0
 
         return round(
-            sum(item[metric] for item in answerable_results)
-            / total_answerable,
-            4
+            sum(item[metric] for item in answerable_results) / total_answerable, 4
         )
 
-    hit_rate = (
-        keyword_hits / total_answerable * 100
-        if total_answerable else 0
-    )
+    hit_rate = keyword_hits / total_answerable * 100 if total_answerable else 0
 
     mean_similarity = (
-        sum(similarity_scores) / len(similarity_scores)
-        if similarity_scores else 0
+        sum(similarity_scores) / len(similarity_scores) if similarity_scores else 0
     )
 
     summary = {
@@ -232,7 +218,7 @@ def evaluate_configuration(config, questions):
         "recall_at_k": average("recall_at_k"),
         "mrr": average("mrr"),
         "mean_similarity": round(mean_similarity, 4),
-        "question_results": question_results
+        "question_results": question_results,
     }
 
     print("\nConfiguration summary:")
@@ -246,10 +232,7 @@ def evaluate_configuration(config, questions):
 
 
 def save_results(results):
-    RESULTS_JSON.write_text(
-        json.dumps(results, indent=4),
-        encoding="utf-8"
-    )
+    RESULTS_JSON.write_text(json.dumps(results, indent=4), encoding="utf-8")
 
     lines = [
         "# AQIExplainer Advanced Retrieval Evaluation",
@@ -257,7 +240,7 @@ def save_results(results):
         "## Configuration Comparison",
         "",
         "| Configuration | Chunk | Overlap | Top-k | Keyword Hit Rate | Precision@K | Recall@K | MRR | Mean Similarity |",
-        "|---|---:|---:|---:|---:|---:|---:|---:|---:|"
+        "|---|---:|---:|---:|---:|---:|---:|---:|---:|",
     ]
 
     for result in results["configurations"]:
@@ -273,39 +256,43 @@ def save_results(results):
             f"| {result['mean_similarity']} |"
         )
 
-    lines.extend([
-        "",
-        "## Winner",
-        "",
-        f"**{results['winner']}**",
-        "",
-        "Winner selected using Recall@K, Precision@K, and MRR.",
-        "",
-        "## Evaluation Method and Limitations",
-        "",
-        "- Keyword hit rate checks whether at least one expected evidence group appears in retrieved text.",
-        "- Precision@K measures the proportion of retrieved chunks matching at least one expected evidence group.",
-        "- Recall@K measures the proportion of expected evidence groups found in retrieved chunks.",
-        "- MRR measures the reciprocal rank of the first chunk matching an expected evidence group.",
-        "- Mean similarity is a retrieval-distance diagnostic, not proof of relevance.",
-        "- These metrics use keyword matching as a relevance proxy. They are not human-verified semantic relevance or answer correctness.",
-        "",
-        "## Unanswerable Questions",
-        "",
-        "Unanswerable questions are excluded from retrieval quality averages.",
-        "Their answer refusal behavior must be evaluated separately.",
-        "",
-        "## Detailed Results",
-        ""
-    ])
+    lines.extend(
+        [
+            "",
+            "## Winner",
+            "",
+            f"**{results['winner']}**",
+            "",
+            "Winner selected using Recall@K, Precision@K, and MRR.",
+            "",
+            "## Evaluation Method and Limitations",
+            "",
+            "- Keyword hit rate checks whether at least one expected evidence group appears in retrieved text.",
+            "- Precision@K measures the proportion of retrieved chunks matching at least one expected evidence group.",
+            "- Recall@K measures the proportion of expected evidence groups found in retrieved chunks.",
+            "- MRR measures the reciprocal rank of the first chunk matching an expected evidence group.",
+            "- Mean similarity is a retrieval-distance diagnostic, not proof of relevance.",
+            "- These metrics use keyword matching as a relevance proxy. They are not human-verified semantic relevance or answer correctness.",
+            "",
+            "## Unanswerable Questions",
+            "",
+            "Unanswerable questions are excluded from retrieval quality averages.",
+            "Their answer refusal behavior must be evaluated separately.",
+            "",
+            "## Detailed Results",
+            "",
+        ]
+    )
 
     for config in results["configurations"]:
-        lines.extend([
-            f"### {config['name']}",
-            "",
-            "| ID | Keyword Hit | Precision@K | Recall@K | MRR |",
-            "|---|---|---:|---:|---:|"
-        ])
+        lines.extend(
+            [
+                f"### {config['name']}",
+                "",
+                "| ID | Keyword Hit | Precision@K | Recall@K | MRR |",
+                "|---|---|---:|---:|---:|",
+            ]
+        )
 
         for item in config["question_results"]:
             lines.append(
@@ -318,10 +305,7 @@ def save_results(results):
 
         lines.append("")
 
-    RESULTS_MD.write_text(
-        "\n".join(lines),
-        encoding="utf-8"
-    )
+    RESULTS_MD.write_text("\n".join(lines), encoding="utf-8")
 
     print("\nEvaluation reports saved:")
     print(RESULTS_JSON)
@@ -334,33 +318,23 @@ def main():
     print("Total evaluation questions:", len(questions))
 
     if len(questions) != 15:
-        raise ValueError(
-            f"Expected exactly 15 questions, found {len(questions)}."
-        )
+        raise ValueError(f"Expected exactly 15 questions, found {len(questions)}.")
 
     results = []
 
     for config in CONFIGURATIONS:
-        results.append(
-            evaluate_configuration(config, questions)
-        )
+        results.append(evaluate_configuration(config, questions))
 
     # Prioritize recall, then precision, then MRR.
     winner = max(
         results,
-        key=lambda item: (
-            item["recall_at_k"],
-            item["precision_at_k"],
-            item["mrr"]
-        )
+        key=lambda item: (item["recall_at_k"], item["precision_at_k"], item["mrr"]),
     )
 
     final_results = {
         "winner": winner["name"],
-        "winner_selection": (
-            "Recall@K, then Precision@K, then MRR"
-        ),
-        "configurations": results
+        "winner_selection": ("Recall@K, then Precision@K, then MRR"),
+        "configurations": results,
     }
 
     save_results(final_results)

@@ -1,11 +1,9 @@
-
 import csv
 import hashlib
 import json
 from pathlib import Path
 
 from pypdf import PdfReader
-
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = BASE_DIR / "data"
@@ -51,8 +49,9 @@ def split_text(text, chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
     return chunks
 
 
-def make_chunks(text, source, title, page,
-                chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
+def make_chunks(
+    text, source, title, page, chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP
+):
     """Create chunk dictionaries with source metadata."""
     output = []
 
@@ -60,20 +59,20 @@ def make_chunks(text, source, title, page,
         split_text(text, chunk_size=chunk_size, overlap=overlap)
     ):
         unique_text = f"{source}|{page}|{index}|{chunk_text}"
-        chunk_id = hashlib.sha256(
-            unique_text.encode("utf-8")
-        ).hexdigest()
+        chunk_id = hashlib.sha256(unique_text.encode("utf-8")).hexdigest()
 
-        output.append({
-            "id": chunk_id,
-            "text": chunk_text,
-            "metadata": {
-                "source": str(source),
-                "title": str(title),
-                "page": str(page),
-                "chunk_index": index
+        output.append(
+            {
+                "id": chunk_id,
+                "text": chunk_text,
+                "metadata": {
+                    "source": str(source),
+                    "title": str(title),
+                    "page": str(page),
+                    "chunk_index": index,
+                },
             }
-        })
+        )
 
     return output
 
@@ -94,7 +93,7 @@ def load_pdf(path, chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
                 title=title,
                 page=page_number,
                 chunk_size=chunk_size,
-                overlap=overlap
+                overlap=overlap,
             )
         )
 
@@ -123,7 +122,7 @@ def load_csv(path, chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
                     title=title,
                     page=f"row-{row_number}",
                     chunk_size=chunk_size,
-                    overlap=overlap
+                    overlap=overlap,
                 )
             )
 
@@ -153,7 +152,7 @@ def load_json(path, chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
                 title=title,
                 page=f"record-{record_number}",
                 chunk_size=chunk_size,
-                overlap=overlap
+                overlap=overlap,
             )
         )
 
@@ -181,21 +180,15 @@ def load_all_chunks(chunk_size=CHUNK_SIZE, overlap=CHUNK_OVERLAP):
 
         if suffix == ".pdf":
             print(f"Reading PDF: {path.name}")
-            all_chunks.extend(
-                load_pdf(path, chunk_size=chunk_size, overlap=overlap)
-            )
+            all_chunks.extend(load_pdf(path, chunk_size=chunk_size, overlap=overlap))
 
         elif suffix == ".csv":
             print(f"Reading CSV: {path.name}")
-            all_chunks.extend(
-                load_csv(path, chunk_size=chunk_size, overlap=overlap)
-            )
+            all_chunks.extend(load_csv(path, chunk_size=chunk_size, overlap=overlap))
 
         elif suffix == ".json":
             print(f"Reading JSON: {path.name}")
-            all_chunks.extend(
-                load_json(path, chunk_size=chunk_size, overlap=overlap)
-            )
+            all_chunks.extend(load_json(path, chunk_size=chunk_size, overlap=overlap))
 
     return all_chunks
 

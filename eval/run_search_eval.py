@@ -1,6 +1,4 @@
-
 from app.vectorstore import search_chunks
-
 
 QUESTIONS = [
     "What is the AQI of Nagpur?",
@@ -12,7 +10,7 @@ QUESTIONS = [
     "Which cities have Moderate AQI?",
     "What is the prominent pollutant in Mumbai?",
     "How many monitoring stations reported data for Pune?",
-    "Which city has the lowest AQI?"
+    "Which city has the lowest AQI?",
 ]
 
 
@@ -23,7 +21,7 @@ def main():
         "Retrieval evaluation using the AQIExplainer ChromaDB collection.",
         "",
         "Top 3 results are recorded for each question.",
-        ""
+        "",
     ]
 
     for number, question in enumerate(QUESTIONS, start=1):
@@ -31,33 +29,26 @@ def main():
 
         results = search_chunks(question, top_k=3)
 
-        output.extend([
-            f"## Question {number}: {question}",
-            ""
-        ])
+        output.extend([f"## Question {number}: {question}", ""])
 
         if not results:
-            output.extend([
-                "No matching chunks were retrieved.",
-                ""
-            ])
+            output.extend(["No matching chunks were retrieved.", ""])
             continue
 
         for rank, result in enumerate(results, start=1):
-            output.extend([
-                f"### Result {rank}",
-                f"- **Title:** {result['title']}",
-                f"- **Source:** `{result['source']}`",
-                f"- **Page/row:** {result['page']}",
-                f"- **Similarity:** {result['similarity']}",
-                f"- **Retrieved text:** {result['text'][:500]}",
-                ""
-            ])
+            output.extend(
+                [
+                    f"### Result {rank}",
+                    f"- **Title:** {result['title']}",
+                    f"- **Source:** `{result['source']}`",
+                    f"- **Page/row:** {result['page']}",
+                    f"- **Similarity:** {result['similarity']}",
+                    f"- **Retrieved text:** {result['text'][:500]}",
+                    "",
+                ]
+            )
 
-        output.extend([
-            "**Manual relevance assessment:** To be reviewed.",
-            ""
-        ])
+        output.extend(["**Manual relevance assessment:** To be reviewed.", ""])
 
     output_path = "eval/search_results.md"
 

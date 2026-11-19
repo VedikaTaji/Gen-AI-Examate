@@ -1,16 +1,14 @@
-
 import re
 
 from app.rag import answer_with_rag
 from app.tools import aqi_subindex_calculator
-
 
 # Recognize pollutant names and their concentration values.
 POLLUTANT_PATTERN = re.compile(
     r"\b(?P<pollutant>PM\s*2\.?5|PM\s*10|NO2|O3|CO|SO2|NH3|PB)\b"
     r"\s*(?:concentration\s*)?(?:is|=|:)?\s*"
     r"(?P<value>\d+(?:\.\d+)?)",
-    re.IGNORECASE
+    re.IGNORECASE,
 )
 
 
@@ -81,10 +79,7 @@ def run_agent(question, top_k=5):
         }
 
     # Step 3: If no concentration is detected, use RAG.
-    rag_result = answer_with_rag(
-        question=question,
-        top_k=top_k
-    )
+    rag_result = answer_with_rag(question=question, top_k=top_k)
 
     return {
         "agent": "AQI Knowledge Agent",
@@ -96,15 +91,7 @@ def run_agent(question, top_k=5):
 
 if __name__ == "__main__":
     print("\nTEST 1: Calculator tool")
-    print(
-        run_agent(
-            "Calculate AQI for PM2.5 45 and PM10 80"
-        )
-    )
+    print(run_agent("Calculate AQI for PM2.5 45 and PM10 80"))
 
     print("\nTEST 2: RAG tool")
-    print(
-        run_agent(
-            "What does Severe AQI indicate?"
-        )
-    )
+    print(run_agent("What does Severe AQI indicate?"))
