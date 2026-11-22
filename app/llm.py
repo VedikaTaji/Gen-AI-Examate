@@ -1,9 +1,13 @@
 import json
 import os
+from contextvars import ContextVar
 from pathlib import Path
 
 import requests
 from dotenv import load_dotenv
+
+# Real token usage reported by the provider for the current request
+LAST_USAGE: ContextVar[dict | None] = ContextVar("last_usage", default=None)
 
 # Project paths
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,6 +86,14 @@ def call_groq(system_prompt, user_prompt):
     response.raise_for_status()
 
     response_data = response.json()
+
+    usage = response_data.get("usage", {})
+    LAST_USAGE.set(
+        {
+            "tokens_in": usage.get("prompt_tokens", 0),
+            "tokens_out": usage.get("completion_tokens", 0),
+        }
+    )
 
     return response_data["choices"][0]["message"]["content"]
 

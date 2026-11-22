@@ -1,0 +1,2 @@
+line-length = 88
+extend-exclude = ["data", "eval/run_eval_day8_backup.py"]

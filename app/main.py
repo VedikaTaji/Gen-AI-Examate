@@ -1,11 +1,21 @@
 import json
+import logging
+import time
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Response
 from pydantic import BaseModel
 
 from app.graph import run_agent_graph
-from app.llm import generate_aqi_response
+from app.guardrails import (
+    MAX_TOP_K,
+    InputRejected,
+    answer_cache,
+    estimate_tokens,
+    log_request,
+    validate_question,
+)
+from app.llm import LAST_USAGE, generate_aqi_response
 from app.rag import answer_with_rag
 from app.smart_search import SmartSearch
 from app.vectorstore import search_chunks
@@ -16,8 +26,9 @@ app = FastAPI(
     version="1.0.0",
 )
 
-DATA_FILE = Path("data/records.json")
+logging.basicConfig(level=logging.INFO)
 
+DATA_FILE = Path(__file__).resolve().parent.parent / "data" / "records.json"
 
 def load_records():
 
@@ -185,26 +196,59 @@ def semantic_search_endpoint(q: str, limit: int = 5):
         raise HTTPException(status_code=500, detail=f"Semantic search failed: {error}")
 
 
+@app.get("/metrics")
+def metrics():
+    """Cache statistics for quick production monitoring."""
+    return {"cache": answer_cache.stats()}
+
+
 @app.post("/ask")
-def ask_with_rag(request: AskRequest):
-    """Answer AQI questions using RAG and document citations."""
+def ask_with_rag(request: AskRequest, response: Response):
+    """Answer AQI questions using RAG, with limits, caching and request logging."""
 
-    question = request.question.strip()
-
-    if not question:
-        raise HTTPException(status_code=400, detail="Question cannot be empty.")
-
-    if request.top_k < 1 or request.top_k > 10:
-        raise HTTPException(status_code=400, detail="top_k must be between 1 and 10.")
+    started = time.perf_counter()
 
     try:
-        return answer_with_rag(question=question, top_k=request.top_k)
-
-    except ValueError as error:
+        question = validate_question(request.question)
+    except InputRejected as error:
+        log_request("/ask", (time.perf_counter() - started) * 1000, 0, 0, False, 400)
         raise HTTPException(status_code=400, detail=str(error))
 
+    if request.top_k < 1 or request.top_k > MAX_TOP_K:
+        raise HTTPException(
+            status_code=400, detail=f"top_k must be between 1 and {MAX_TOP_K}."
+        )
+
+    key = answer_cache.make_key(question, request.top_k)
+    cached = answer_cache.get(key)
+
+    if cached is not None:
+        log_request("/ask", (time.perf_counter() - started) * 1000, 0, 0, True, 200)
+        response.headers["X-Cache"] = "HIT"
+        return cached
+
+    LAST_USAGE.set(None)
+    try:
+        result = answer_with_rag(question=question, top_k=request.top_k)
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error))
     except (RuntimeError, OSError) as error:
+        log_request("/ask", (time.perf_counter() - started) * 1000, 0, 0, False, 500)
         raise HTTPException(status_code=500, detail=f"RAG request failed: {error}")
+
+    answer_cache.set(key, result)
+    usage = LAST_USAGE.get() or {}  # real provider usage; estimate if unavailable
+    log_request(
+        "/ask",
+        (time.perf_counter() - started) * 1000,
+        usage.get("tokens_in")
+        or estimate_tokens(question) + result["retrieved_chunks"] * 225,
+        usage.get("tokens_out") or estimate_tokens(result["answer"]),
+        False,
+        200,
+    )
+    response.headers["X-Cache"] = "MISS"
+    return result
 
 
 @app.post("/agent")

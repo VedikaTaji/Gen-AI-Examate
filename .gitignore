@@ -17,3 +17,5 @@ Data/chroma/
 
 # Streamlit feedback
 ui/feedback.jsonl
+
+logs/

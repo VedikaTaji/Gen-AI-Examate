@@ -10,3 +10,4 @@ __pycache__/
 data/chroma/
 Data/chroma/
 ui/feedback.jsonl
+logs/
