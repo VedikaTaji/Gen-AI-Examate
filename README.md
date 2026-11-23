@@ -1110,8 +1110,6 @@ During this development journey, the project involved practical implementation a
 ## 20. Author
 
 **Name:** Vedika Taji
-
 **Project:** AQIExplainer
-
 **Repository:** [Gen-AI-Examate](https://github.com/VedikaTaji/Gen-AI-Examate)
-
+**Live Backend :** https://aqiexplainer.onrender.com
