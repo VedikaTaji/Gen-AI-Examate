@@ -6,6 +6,8 @@ from pathlib import Path
 import requests
 from dotenv import load_dotenv
 
+from app.guardrails import estimate_tokens
+
 # Real token usage reported by the provider for the current request
 LAST_USAGE: ContextVar[dict | None] = ContextVar("last_usage", default=None)
 
@@ -24,6 +26,28 @@ def load_prompt(filename):
 
     with prompt_path.open("r", encoding="utf-8") as file:
         return file.read()
+
+
+def _record_token_usage(usage, input_keys, output_keys, system_prompt, user_prompt, text):
+    usage = usage if isinstance(usage, dict) else {}
+
+    def provider_count(keys):
+        for key in keys:
+            value = usage.get(key)
+            if isinstance(value, int) and not isinstance(value, bool) and value >= 0:
+                return value
+        return None
+
+    tokens_in = provider_count(input_keys)
+    tokens_out = provider_count(output_keys)
+    LAST_USAGE.set(
+        {
+            "tokens_in": tokens_in
+            if tokens_in is not None
+            else estimate_tokens(f"{system_prompt}\n{user_prompt}"),
+            "tokens_out": tokens_out if tokens_out is not None else estimate_tokens(text),
+        }
+    )
 
 
 def parse_response(response_text):
@@ -91,17 +115,16 @@ def call_groq(system_prompt, user_prompt):
     response.raise_for_status()
 
     response_data = response.json()
-
-    usage = response_data.get("usage", {})
-    LAST_USAGE.set(
-        {
-            "tokens_in": usage.get("prompt_tokens", 0),
-            "tokens_out": usage.get("completion_tokens", 0),
-        }
+    text = response_data["choices"][0]["message"]["content"]
+    _record_token_usage(
+        response_data.get("usage"),
+        ("prompt_tokens", "input_tokens"),
+        ("completion_tokens", "output_tokens"),
+        system_prompt,
+        user_prompt,
+        text,
     )
-
-    return response_data["choices"][0]["message"]["content"]
-
+    return text
 
 def call_gemini(system_prompt, user_prompt):
     """Send a request to the Gemini API."""
@@ -134,8 +157,16 @@ def call_gemini(system_prompt, user_prompt):
     response.raise_for_status()
 
     response_data = response.json()
-
-    return response_data["candidates"][0]["content"]["parts"][0]["text"]
+    text = response_data["candidates"][0]["content"]["parts"][0]["text"]
+    _record_token_usage(
+        response_data.get("usageMetadata"),
+        ("promptTokenCount", "prompt_token_count"),
+        ("candidatesTokenCount", "outputTokenCount", "candidates_token_count"),
+        system_prompt,
+        user_prompt,
+        text,
+    )
+    return text
 
 
 def generate_aqi_response(question, records, prompt_version="v2"):

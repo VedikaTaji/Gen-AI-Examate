@@ -1,9 +1,10 @@
 import json
 import logging
 import time
+import uuid
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Query, Response
+from fastapi import FastAPI, HTTPException, Query, Request, Response
 from pydantic import BaseModel
 
 from app.graph import run_agent_graph
@@ -11,7 +12,6 @@ from app.guardrails import (
     MAX_TOP_K,
     InputRejected,
     answer_cache,
-    estimate_tokens,
     log_request,
     validate_question,
 )
@@ -27,6 +27,34 @@ app = FastAPI(
 )
 
 logging.basicConfig(level=logging.INFO)
+
+
+@app.middleware("http")
+async def monitor_requests(request: Request, call_next):
+    request_id = uuid.uuid4().hex
+    started = time.perf_counter()
+    request.state.cache_hit = False
+    request.state.llm_usage = None
+    LAST_USAGE.set(None)
+    status_code = 500
+
+    try:
+        response = await call_next(request)
+        status_code = response.status_code
+    finally:
+        usage = request.state.llm_usage or LAST_USAGE.get() or {}
+        log_request(
+            endpoint=request.url.path,
+            latency_ms=(time.perf_counter() - started) * 1000,
+            tokens_in=usage.get("tokens_in", 0),
+            tokens_out=usage.get("tokens_out", 0),
+            cache_hit=request.state.cache_hit,
+            status=status_code,
+            request_id=request_id,
+        )
+
+    response.headers["X-Request-ID"] = request_id
+    return response
 
 DATA_FILE = Path(__file__).resolve().parent.parent / "data" / "records.json"
 
@@ -51,6 +79,14 @@ def load_records():
 
 records = load_records()
 search_engine = SmartSearch(records)
+MAX_THREAD_ID_CHARS = 128
+
+
+def require_question(question):
+    try:
+        return validate_question(question)
+    except InputRejected as error:
+        raise HTTPException(status_code=400, detail=str(error)) from error
 
 
 class QuestionRequest(BaseModel):
@@ -101,8 +137,9 @@ def get_record(record_id: int):
 
 @app.get("/search")
 def search_records(
-    q: str = Query(..., min_length=1), limit: int = Query(default=10, ge=1, le=100)
+    q: str = Query(...), limit: int = Query(default=10, ge=1, le=100)
 ):
+    q = require_question(q)
 
     results = search_engine.search(q, limit)
 
@@ -112,10 +149,7 @@ def search_records(
 @app.post("/questions")
 def ask_question(request: QuestionRequest):
 
-    question = request.question.strip().lower()
-
-    if not question:
-        raise HTTPException(status_code=400, detail="Question cannot be empty")
+    question = require_question(request.question).lower()
 
     if not records:
         return {"question": request.question, "answer": "No AQI data available."}
@@ -151,12 +185,9 @@ def ask_question(request: QuestionRequest):
 
 
 @app.post("/chat")
-def chat(request: ChatRequest):
+def chat(request: ChatRequest, http_request: Request):
 
-    question = request.question.strip()
-
-    if not question:
-        raise HTTPException(status_code=400, detail="Question cannot be empty.")
+    question = require_question(request.question)
 
     try:
         result = generate_aqi_response(
@@ -170,16 +201,15 @@ def chat(request: ChatRequest):
 
     except RuntimeError as error:
         raise HTTPException(status_code=502, detail=str(error))
+    finally:
+        http_request.state.llm_usage = LAST_USAGE.get()
 
 
 @app.get("/search/semantic")
 def semantic_search_endpoint(q: str, limit: int = 5):
     """Search AQI documents using semantic similarity."""
 
-    question = q.strip()
-
-    if not question:
-        raise HTTPException(status_code=400, detail="Search question cannot be empty.")
+    question = require_question(q)
 
     if limit < 1 or limit > 20:
         raise HTTPException(status_code=400, detail="Limit must be between 1 and 20.")
@@ -203,16 +233,10 @@ def metrics():
 
 
 @app.post("/ask")
-def ask_with_rag(request: AskRequest, response: Response):
+def ask_with_rag(request: AskRequest, response: Response, http_request: Request):
     """Answer AQI questions using RAG, with limits, caching and request logging."""
 
-    started = time.perf_counter()
-
-    try:
-        question = validate_question(request.question)
-    except InputRejected as error:
-        log_request("/ask", (time.perf_counter() - started) * 1000, 0, 0, False, 400)
-        raise HTTPException(status_code=400, detail=str(error))
+    question = require_question(request.question)
 
     if request.top_k < 1 or request.top_k > MAX_TOP_K:
         raise HTTPException(
@@ -223,7 +247,7 @@ def ask_with_rag(request: AskRequest, response: Response):
     cached = answer_cache.get(key)
 
     if cached is not None:
-        log_request("/ask", (time.perf_counter() - started) * 1000, 0, 0, True, 200)
+        http_request.state.cache_hit = True
         response.headers["X-Cache"] = "HIT"
         return cached
 
@@ -233,39 +257,39 @@ def ask_with_rag(request: AskRequest, response: Response):
     except ValueError as error:
         raise HTTPException(status_code=400, detail=str(error))
     except (RuntimeError, OSError) as error:
-        log_request("/ask", (time.perf_counter() - started) * 1000, 0, 0, False, 500)
         raise HTTPException(status_code=500, detail=f"RAG request failed: {error}")
+    finally:
+        http_request.state.llm_usage = LAST_USAGE.get()
 
     answer_cache.set(key, result)
-    usage = LAST_USAGE.get() or {}  # real provider usage; estimate if unavailable
-    log_request(
-        "/ask",
-        (time.perf_counter() - started) * 1000,
-        usage.get("tokens_in")
-        or estimate_tokens(question) + result["retrieved_chunks"] * 225,
-        usage.get("tokens_out") or estimate_tokens(result["answer"]),
-        False,
-        200,
-    )
     response.headers["X-Cache"] = "MISS"
     return result
 
 
 @app.post("/agent")
-def agent_endpoint(request: AgentRequest):
+def agent_endpoint(request: AgentRequest, http_request: Request):
 
     try:
         if not request.thread_id.strip():
             raise HTTPException(status_code=400, detail="thread_id cannot be empty.")
 
-        if request.approval is None and not request.question:
-            raise HTTPException(status_code=400, detail="Question is required.")
+        if len(request.thread_id) > MAX_THREAD_ID_CHARS:
+            raise HTTPException(
+                status_code=400,
+                detail=f"thread_id too long (max {MAX_THREAD_ID_CHARS} characters).",
+            )
 
-        result = run_agent_graph(
-            question=request.question,
-            thread_id=request.thread_id,
-            approval=request.approval,
-        )
+        if request.approval is None or request.question is not None:
+            request.question = require_question(request.question)
+
+        try:
+            result = run_agent_graph(
+                question=request.question,
+                thread_id=request.thread_id,
+                approval=request.approval,
+            )
+        finally:
+            http_request.state.llm_usage = LAST_USAGE.get()
 
         return result
 

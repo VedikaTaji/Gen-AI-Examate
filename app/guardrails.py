@@ -97,14 +97,27 @@ def estimate_tokens(text) -> int:
     return max(1, len(str(text)) // 4)
 
 
-def log_request(endpoint, latency_ms, tokens_in, tokens_out, cache_hit, status):
+def log_request(
+    endpoint,
+    latency_ms,
+    tokens_in,
+    tokens_out,
+    cache_hit,
+    status,
+    request_id=None,
+):
+    tokens_in = max(0, int(tokens_in or 0))
+    tokens_out = max(0, int(tokens_out or 0))
     entry = {
         "ts": round(time.time(), 3),
+        "request_id": request_id,
         "endpoint": endpoint,
         "latency_ms": round(latency_ms, 1),
         "tokens_in": tokens_in,
         "tokens_out": tokens_out,
+        "total_tokens": tokens_in + tokens_out,
         "cache_hit": cache_hit,
+        "status_code": status,
         "status": status,
     }
     logger.info("request %s", json.dumps(entry))

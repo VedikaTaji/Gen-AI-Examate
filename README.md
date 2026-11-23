@@ -1,58 +1,54 @@
-# AQIExplainer
+# AQIExplainer – GenAI-Based Air Quality Analysis System
 
 ## 1. Project Overview
 
-AQIExplainer is a Python-based project designed to help users understand Air Quality Index (AQI) information across different cities in Maharashtra.
+AQIExplainer is a Python-based Generative AI application designed to help users understand Air Quality Index (AQI) information across different cities in Maharashtra.
 
-The project combines data processing, search techniques, Large Language Models (LLMs), document retrieval, semantic search and Retrieval-Augmented Generation (RAG) to make air quality information easier to access and understand.
+The project combines data processing, traditional search, Large Language Models (LLMs), semantic search, document retrieval, Retrieval-Augmented Generation (RAG), and agentic AI to make air quality information easier to access and understand.
 
 **The project provides:**
 
-- City-wise AQI values.
-- Air quality categories.
-- Prominent pollutants.
-- Monitoring station information.
-- Searchable AQI records.
+- City-wise AQI values and air quality categories.
+- Prominent pollutants and monitoring station information.
+- Searchable and structured AQI records.
 - AI-powered AQI question answering.
 - Document-based information retrieval.
 - Semantic search using vector embeddings.
-- RAG-based answers with document citations.
-- Cleaned and organized AQI data in JSON format.
-- AQI calculations using pollutant concentrations.
+- RAG-based answers with source citations.
+- Pollutant-based AQI calculations.
 - Agent-based question routing and human approval.
 - Interactive conversational interface.
+- Request monitoring, caching, and input safety features.
 
-## 2. Product
+## 2. Problem Statement
 
-- An AI-powered Air Quality Information and Explanation System.
-- Helps users access and understand city-wise air quality information.
-- Organizes AQI records for easy searching and analysis.
-- Processes raw AQI data into structured records.
-- Uses LLMs to generate natural-language AQI explanations.
-- Uses document retrieval and semantic search to find relevant AQI information.
-- Uses RAG to generate answers grounded in retrieved documents.
-- Provides AQI calculations and agent-based workflows.
+Air pollution is a major environmental concern. Although AQI information is publicly available, many people find it difficult to understand AQI values, their categories, and the pollutants responsible for air quality conditions.
 
-## 3. Target Users
+AQIExplainer aims to:
+
+- Organize air quality information into structured records.
+- Make AQI data easier to understand.
+- Help users search for city-wise air quality information.
+- Generate understandable answers to AQI-related questions.
+- Retrieve relevant information from AQI documents.
+- Provide source-grounded answers with references.
+- Calculate AQI sub-indices from pollutant concentrations.
+- Improve awareness about environmental pollution.
+
+## 3. Product Description
+
+AQIExplainer is an AI-powered Air Quality Information and Explanation System.
+
+It processes AQI datasets and documents, retrieves relevant information using semantic search, and generates contextual answers using LLMs.
+
+The system also includes an AQI calculator and agent workflow that can route calculation-related questions to the appropriate tool and request human approval before calculator execution.
+
+## 4. Target Users
 
 - General public.
 - Students.
 - Researchers.
 - People interested in air pollution and environmental awareness.
-
-## 4. Problem Statement
-
-Air pollution is a major environmental concern. Although AQI information is publicly available, many people find it difficult to understand AQI values, their categories and the pollutants responsible for air quality conditions.
-
-**AQIExplainer aims to:**
-
-- Organize air quality information.
-- Make AQI data easier to understand.
-- Help users search for city-wise air quality information.
-- Generate understandable answers to AQI-related questions.
-- Improve awareness about environmental pollution.
-- Process and organize raw air quality data for further analysis.
-- Provide document-grounded answers with source references.
 
 ## 5. Data Sources
 
@@ -79,7 +75,6 @@ https://cpcb.nic.in/National-Air-Quality-Index/
 ## 6. Technologies Used
 
 ### Programming and Backend
-
 - Python
 - FastAPI
 - Uvicorn
@@ -87,7 +82,6 @@ https://cpcb.nic.in/National-Air-Quality-Index/
 - Exception Handling
 
 ### Data Processing and Search
-
 - CSV and JSON
 - Pandas
 - Scikit-learn
@@ -96,7 +90,6 @@ https://cpcb.nic.in/National-Air-Quality-Index/
 - PyPDF
 
 ### Generative AI and Retrieval
-
 - Large Language Models (LLMs)
 - Groq API
 - Google Gemini API
@@ -109,7 +102,6 @@ https://cpcb.nic.in/National-Air-Quality-Index/
 - Source-based Citations
 
 ### Agentic AI
-
 - Rule-Based Agent
 - LangGraph
 - Conditional Routing
@@ -118,13 +110,21 @@ https://cpcb.nic.in/National-Air-Quality-Index/
 - MemorySaver Checkpointing
 
 ### Frontend
-
 - Streamlit
 - Streamlit Session State
 - Conversational Chat Interface
 
-### Development Tools
+### Production Readiness and Testing
+- Pytest
+- Ruff
+- LRU Cache
+- Time-to-Live (TTL) Cache
+- Request Latency Logging
+- Token Usage Tracking
+- Input Validation
+- Prompt-Injection Screening
 
+### Development Tools
 - Git and GitHub
 - Visual Studio Code
 - Python Virtual Environment
@@ -149,7 +149,7 @@ https://cpcb.nic.in/National-Air-Quality-Index/
 - Retrieve relevant document chunks through semantic search.
 - Generate RAG-based answers using retrieved document context.
 - Provide source references with generated answers.
-- Return "I don't know" when the requested historical information is unavailable.
+- Return "I don't know" when requested historical information is unavailable.
 - Evaluate retrieval performance using predefined AQI questions and different configurations.
 - Calculate AQI sub-indices using pollutant concentrations.
 - Identify the dominant pollutant.
@@ -160,6 +160,10 @@ https://cpcb.nic.in/National-Air-Quality-Index/
 - Display source citations and conversation history.
 - Collect thumbs-up and thumbs-down user feedback.
 - Display a six-category CPCB AQI colour indicator with health-impact statements.
+- Cache repeated RAG questions.
+- Log request latency and token usage for `/ask`.
+- Apply question-length and retrieval-limit validation.
+- Screen common prompt-injection patterns.
 
 ## 8. Project Structure
 
@@ -170,17 +174,22 @@ Gen-AI-Examate/
 ├── requirements.txt
 ├── .gitignore
 ├── .env.example
+├── ruff.toml
 │
-├── day01_intro.py
-├── day01_menu.py
+├── analysis/
+│   └── explore.py
+│
+├── data/
+│   ├── raw/
+│   ├── sample_records.py
+│   ├── records.json
+│   └── chroma/
 │
 ├── docs/
 │   ├── how_llms_work.md
 │   ├── user_questions.md
-│   └── checkpoint-2.png
-│
-├── analysis/
-│   └── explore.py
+│   ├── checkpoint-2.png
+│   └── resume.md
 │
 ├── eval/
 │   ├── eval_set.json
@@ -190,18 +199,6 @@ Gen-AI-Examate/
 │   ├── results.md
 │   ├── search_results.md
 │   └── prompt_compare.md
-│
-├── data/
-│   ├── raw/
-│   │   ├── AQI_Bulletin_20261106.pdf
-│   │   ├── About_AQI.pdf
-│   │   ├── aqi_data.csv
-│   │   ├── cpcb_aqi_portal.html
-│   │   └── cpcb_ogd_resource.html
-│   │
-│   ├── sample_records.py
-│   ├── records.json
-│   └── chroma/
 │
 ├── app/
 │   ├── __init__.py
@@ -219,21 +216,37 @@ Gen-AI-Examate/
 │   ├── rag.py
 │   ├── tools.py
 │   ├── agent_loop.py
-│   └── graph.py
+│   ├── graph.py
+│   └── guardrails.py
+│
+├── tests/
+│   ├── conftest.py
+│   ├── test_health.py
+│   ├── test_records.py
+│   ├── test_search.py
+│   ├── test_ask.py
+│   ├── test_agent.py
+│   └── test_guardrails.py
+│
+├── logs/
+│   └── requests.jsonl
 │
 └── ui/
     └── app.py
 ```
 
-Note: `data/chroma/` contains local persistent vector database files. `ui/feedback.jsonl` is generated locally when feedback is submitted. The structure above lists the main project files; keep it aligned with the files actually present in the repository.
+Note: The structure above describes the main project components. Some folders and files, such as `logs/requests.jsonl` and `docs/resume.md`, are generated or added during development. Local ChromaDB data and environment files should not be committed to GitHub.
 
-## 9. Project Progress
+## 9. Project Development Journey
 
 ### Day 1 – Python Fundamentals
 
 - Created the project introduction.
 - Developed a menu-based application.
-- Practised Python variables, f-strings, input(), while loops and conditional statements.
+- Practised Python variables and data types.
+- Used f-strings and input().
+- Implemented while loops and conditional statements.
+- Practised basic Python programming and control flow.
 
 ### Day 2 – AQI Dataset and Search
 
@@ -242,6 +255,7 @@ Note: `data/chroma/` contains local persistent vector database files. `ui/feedba
 - Implemented AQI category counting.
 - Added record retrieval functionality.
 - Developed a command-line interface.
+- Organized AQI information into structured records.
 
 ### Day 3 – Data Ingestion and Processing
 
@@ -373,6 +387,15 @@ Note: `data/chroma/` contains local persistent vector database files. `ui/feedba
 - Created `eval/run_search_eval.py` to evaluate retrieval against 10 AQI questions.
 - Prepared `eval/search_results.md` for recording search results.
 
+**Day 7 Status:**
+
+- Document extraction and chunking successfully completed.
+- Generated 61 document chunks.
+- ChromaDB embedding generation successfully completed.
+- Indexed all 61 chunks in the persistent `aqi_documents` collection.
+- Verified collection access and document count.
+- Prepared the semantic search API and evaluation workflow.
+
 **Concepts Learned:**
 
 - Document chunking.
@@ -383,15 +406,6 @@ Note: `data/chroma/` contains local persistent vector database files. `ui/feedba
 - Vector databases.
 - ChromaDB.
 - Retrieval evaluation.
-
-**Day 7 Status:**
-
-- Document extraction and chunking successfully completed.
-- Generated 61 document chunks.
-- ChromaDB embedding generation successfully completed.
-- Indexed all 61 chunks in the persistent `aqi_documents` collection.
-- Verified collection access and document count.
-- Prepared the semantic search API and evaluation workflow.
 
 ### Day 8 – Retrieval-Augmented Generation (RAG) and Evaluation
 
@@ -594,15 +608,235 @@ Implemented a six-category AQI colour indicator based on the CPCB AQI scale.
 - User feedback collection.
 - AQI classification and visualization.
 
-## 10. GitHub and Version Control
+### Day 11 – Testing and Code Quality
+
+**S1: Automated Testing**
+
+- Created a `tests/` directory using Pytest.
+- Added tests for the health endpoint.
+- Added tests for AQI records and search functionality.
+- Added a test for the `/ask` endpoint using a mocked RAG response.
+- Added tests for AQI calculator functionality.
+- Tested pollutant validation and AQI category classification.
+- Tested agent routing and invalid input handling.
+- Used FastAPI TestClient for API endpoint testing.
+- Used mocking to avoid real LLM API calls during the `/ask` test.
+
+**S2: Code Quality**
+
+- Configured Ruff for Python linting.
+- Used Ruff to identify and correct import-order and code-quality issues.
+- Ran the test suite using `python -m pytest tests/ -v`.
+
+**Test Results Recorded**
+
+The initial corrected test suite completed with 16 tests passing and no failures.
+
+**S3: Docker Packaging**
+
+The Day 11 task includes creating a Dockerfile, `.dockerignore` and `docker-compose.yml` to run the FastAPI backend and Streamlit frontend together.
+
+**Status:** Docker deployment files and successful container execution must be verified before marking this section complete.
+
+**Concepts Learned:**
+
+- Pytest.
+- API testing.
+- TestClient.
+- Mocking and fake LLM responses.
+- Unit testing.
+- Ruff linting.
+- Docker and Docker Compose concepts.
+
+### Day 12 – Integration and Refinement
+
+**Status: Details to be added.**
+
+Add the exact Day 12 tasks, implementation files, features and test results here once confirmed. This section is intentionally left without assumed achievements.
+
+### Day 13 – Production Readiness and Project Documentation
+
+**S1: Production Readiness**
+
+Implemented basic production-oriented safeguards and monitoring for the RAG `/ask` endpoint.
+
+**Request Latency and Token Tracking**
+
+- Added request latency measurement using Python's performance timer.
+- Recorded request latency in milliseconds.
+- Captured provider token usage when available.
+- Added approximate token estimation when provider usage information is unavailable.
+- Recorded request metadata in JSONL format.
+
+**Caching**
+
+- Implemented a thread-safe LRU cache with TTL expiration.
+- Configured a maximum cache capacity of 256 entries.
+- Configured a cache TTL of 900 seconds (15 minutes).
+- Normalized question text when generating cache keys.
+- Added cache hit and miss tracking.
+- Exposed cache statistics through the `/metrics` endpoint.
+- Added an `X-Cache` response header to the `/ask` endpoint.
+
+**Input Validation and Prompt-Injection Screening**
+
+- Restricted questions to a maximum of 500 characters.
+- Restricted retrieval `top_k` to a maximum of 10.
+- Rejected empty questions.
+- Added pattern-based screening for common prompt-injection attempts.
+- Prevented detected injection attempts from reaching the RAG/LLM function.
+
+**Request Logging**
+
+The `/ask` endpoint records:
+
+- Request timestamp.
+- Endpoint.
+- Request latency.
+- Input token count.
+- Output token count.
+- Cache hit or miss.
+- HTTP status code.
+
+Metrics are stored locally in:
+
+`logs/requests.jsonl`
+
+**Production Configuration**
+
+| Parameter | Value |
+|---|---:|
+| Maximum question length | 500 characters |
+| Maximum top_k | 10 |
+| Cache capacity | 256 entries |
+| Cache TTL | 900 seconds |
+| Cache strategy | LRU with TTL |
+| Latency measurement | Milliseconds |
+| Metrics storage | JSONL |
+
+**S2: Project Documentation**
+
+- Updated the project README with its problem statement and system overview.
+- Documented the project architecture using Mermaid.
+- Added a section describing production-readiness features.
+- Added a performance results table for measured values.
+- Prepared a project demonstration video link.
+- Created `docs/resume.md` containing three resume-ready project bullets.
+
+**Architecture Diagram**
+
+```mermaid
+flowchart TD
+    A[User] --> B[Streamlit Frontend]
+    B --> C[FastAPI Backend]
+    C --> D[Input Validation and Guardrails]
+    D --> E{Request Type}
+
+    E -->|AQI Question| F[RAG Pipeline]
+    E -->|AQI Calculation| G[AQI Calculator Agent]
+
+    F --> H[Document Embeddings]
+    H --> I[ChromaDB Vector Search]
+    I --> J[Retrieved Context]
+    J --> K[Groq / Gemini LLM]
+    K --> L[Grounded Answer and Citations]
+
+    G --> M[Pollutant Sub-index Calculation]
+    M --> N[Overall AQI and Category]
+
+    L --> O[API Response]
+    N --> O
+    O --> B
+
+    C --> P[LRU Cache]
+    C --> Q[Latency and Token Metrics]
+```
+
+**Performance Results**
+
+| Metric | Result |
+|---|---|
+| First request latency | To be measured |
+| Cached request latency | To be measured |
+| Cache hit rate | To be measured |
+| Average input tokens | To be measured |
+| Average output tokens | To be measured |
+| Automated test result | Update after final Day 13 test run |
+
+*Performance values must be updated using actual benchmark and request-log data.*
+
+**Project Demonstration**
+
+Demo Video: ADD_YOUR_DEMO_VIDEO_URL
+
+**Concepts Learned:**
+
+- Request latency measurement.
+- Token usage tracking.
+- LRU caching.
+- TTL expiration.
+- Input validation.
+- Prompt-injection screening.
+- Request observability.
+- Production-oriented API design.
+- Automated testing.
+- Technical documentation.
+
+## 10. Retrieval Evaluation Summary
+
+AQIExplainer uses a 15-question evaluation dataset to compare two retrieval configurations.
+
+| Metric | Configuration A | Configuration B |
+|---|---:|---:|
+| Chunk Size | 900 | 500 |
+| Overlap | 150 | 100 |
+| Top K | 3 | 5 |
+| Keyword Hit Rate | 100% | 100% |
+| Precision@K | 0.9286 | 0.8571 |
+| Recall@K | 0.7500 | 0.7738 |
+| MRR | 0.9524 | 0.9464 |
+| Mean Similarity | 0.5490 | 0.5191 |
+
+**Key Observations**
+
+- Configuration A achieved higher Precision@K, MRR and mean similarity.
+- Configuration B achieved slightly higher Recall@K.
+- Both configurations achieved a 100% keyword-based retrieval hit rate.
+- Configuration A was selected for its stronger precision-oriented performance.
+
+**Evaluation Limitation:** These metrics measure retrieval relevance and ranking. They do not independently establish factual answer correctness or citation support.
+
+## 11. System Architecture and Workflow
+
+AQIExplainer follows a modular architecture.
+
+1. The user interacts with the Streamlit frontend.
+2. The frontend sends requests to the FastAPI backend.
+3. The backend validates the input.
+4. AQI questions are processed through the RAG pipeline.
+5. ChromaDB retrieves relevant document chunks using semantic search.
+6. The retrieved context is passed to the configured LLM provider.
+7. The generated answer includes source-based citations.
+8. Calculation-related requests can be routed to the AQI calculator.
+9. The LangGraph workflow supports conditional routing and human approval.
+10. The API returns the response to the frontend.
+
+Production-oriented request monitoring and caching are implemented for the `/ask` endpoint.
+
+## 12. GitHub and Version Control
 
 - Maintained the project using Git and GitHub.
 - Used Git commits to track daily development.
 - Organized project files into reusable modules.
 - Used Git checkpoints to maintain development progress.
+- Created the `checkpoint-1` and `checkpoint-2` development checkpoints.
 - Excluded environment files and local database storage from version control.
 
-## 11. How to Run the Project
+**GitHub Repository:**
+
+https://github.com/VedikaTaji/Gen-AI-Examate
+
+## 13. How to Run the Project
 
 ### Step 1: Clone the Repository
 
@@ -625,7 +859,7 @@ Activate it on Windows PowerShell:
 
 ### Step 3: Install Dependencies
 
-```bash
+```powershell
 python -m pip install -r requirements.txt
 ```
 
@@ -647,19 +881,19 @@ Do not upload your actual `.env` file or API keys to GitHub.
 
 ### Step 5: Run AQI Data Analysis
 
-```bash
+```powershell
 python -m analysis.explore
 ```
 
 ### Step 6: Build the Document Chunks
 
-```bash
+```powershell
 python -m app.chunking
 ```
 
 ### Step 7: Build the ChromaDB Semantic Search Index
 
-```bash
+```powershell
 python -m app.vectorstore
 ```
 
@@ -667,7 +901,7 @@ This creates or rebuilds the default `aqi_documents` collection using 900-charac
 
 ### Step 8: Start the FastAPI Server
 
-```bash
+```powershell
 python -m uvicorn app.main:app --reload
 ```
 
@@ -685,7 +919,7 @@ Use Swagger UI to test the available API endpoints, including semantic search an
 
 ### Step 10: Run Semantic Search Evaluation
 
-```bash
+```powershell
 python -m eval.run_search_eval
 ```
 
@@ -693,7 +927,7 @@ python -m eval.run_search_eval
 
 Stop the running FastAPI server if necessary, then execute:
 
-```bash
+```powershell
 python -m eval.run_eval
 ```
 
@@ -724,7 +958,33 @@ http://localhost:8501
 
 Keep both the FastAPI backend and Streamlit frontend terminals running while using the application.
 
-## 12. Available API Endpoints
+### Step 13: Run Automated Tests
+
+```powershell
+python -m pytest tests/ -v
+```
+
+### Step 14: Run Ruff
+
+```powershell
+ruff check .
+```
+
+### Step 15: Inspect Production Metrics
+
+After starting the FastAPI backend and sending requests to `/ask`, inspect the cache statistics:
+
+```powershell
+Invoke-RestMethod http://127.0.0.1:8000/metrics
+```
+
+Inspect recent request logs:
+
+```powershell
+Get-Content logs\requests.jsonl | Select-Object -Last 5
+```
+
+## 14. Available API Endpoints
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -737,61 +997,64 @@ Keep both the FastAPI backend and Streamlit frontend terminals running while usi
 | GET | `/search/semantic?q=air quality` | Search relevant AQI document chunks semantically |
 | POST | `/ask` | Generate RAG-based answers with document citations |
 | POST | `/agent` | Execute the LangGraph agent workflow |
+| GET | `/metrics` | Retrieve cache statistics |
 
-**Note:** The semantic search and RAG endpoints require a successfully built ChromaDB index.
+**Note:** Semantic search and RAG endpoints require a successfully built ChromaDB index. The `/metrics` endpoint exposes cache statistics.
 
-## 13. Current AI Implementation
+## 15. Production Notes
 
-AQIExplainer combines multiple AI and information-retrieval techniques:
+### Input Safety
 
-1. **Traditional Search:** TF-IDF vectorization and cosine similarity are used to rank matching AQI records.
+- Empty questions are rejected.
+- Questions longer than 500 characters are rejected.
+- Retrieval `top_k` values outside the allowed range are rejected.
+- Common prompt-injection patterns are screened before RAG execution.
 
-2. **LLM Integration:** Groq and Google Gemini APIs are integrated for natural-language AQI question answering.
+### Cache Configuration
 
-3. **Document Processing:** PDF, CSV and JSON documents are extracted and divided into overlapping chunks.
+- Cache capacity: 256 entries.
+- Cache expiration: 900 seconds.
+- Cache strategy: LRU with TTL.
+- Cache statistics are available through `/metrics`.
+- Cache status is returned through the `X-Cache` response header on `/ask`.
 
-4. **Embedding-Based Retrieval:** ChromaDB stores document embeddings and supports semantic retrieval.
+### Request Monitoring
 
-5. **Retrieval-Augmented Generation:** Retrieved document chunks are passed as context to an LLM to generate grounded answers.
+Request metrics are recorded in `logs/requests.jsonl`.
 
-6. **Source-Based Citations:** RAG responses include references to retrieved document sources.
+The logged information includes:
 
-7. **Retrieval Evaluation:** A 15-question evaluation dataset compares different chunking and top-k configurations using keyword hit rate, Precision@K, Recall@K, MRR and mean similarity.
+- Timestamp.
+- Endpoint.
+- Latency in milliseconds.
+- Input token count.
+- Output token count.
+- Cache hit or miss.
+- HTTP status code.
 
-8. **AQI Calculation:** Pollutant concentrations are processed using breakpoint interpolation to calculate sub-indices and overall AQI.
+When provider token usage is unavailable, the application uses an approximate token estimate. Such estimates should not be presented as exact provider-reported token counts.
 
-9. **Agent Workflow:** A rule-based agent and LangGraph workflow route requests to RAG or the AQI calculator, with human approval before calculator execution.
+### Performance Results
 
-10. **Conversational Interface:** Streamlit provides a chat interface connected to FastAPI, with source citations, feedback collection and AQI category visualization.
+Update this table after running actual measurements.
 
-The initial retrieval experiment selected Configuration A (900-character chunks, 150-character overlap and top-k 3) based on its higher mean similarity score while maintaining a 100% keyword-based retrieval hit rate.
+| Metric | Measured Value |
+|---|---|
+| First request latency | Pending measurement |
+| Cached request latency | Pending measurement |
+| Cache hit rate | Pending measurement |
+| Average input tokens | Pending measurement |
+| Average output tokens | Pending measurement |
 
-The Day 10 evaluation also compared Precision@K, Recall@K and MRR. Configuration A performed better in precision-oriented metrics, while Configuration B achieved slightly higher recall.
+## 16. Resume Description
 
-The project is being developed incrementally, with each stage building on the previous implementation.
+Three resume-ready points are maintained in `docs/resume.md`.
 
-## 14. Checkpoint 2 – AQIExplainer Live Demo
+- Developed a GenAI-powered AQI analysis system using Python, Retrieval-Augmented Generation (RAG), LLMs and ChromaDB to generate context-grounded air quality insights.
+- Built a FastAPI backend and Streamlit interface with semantic document retrieval, pollutant-based AQI calculation and Groq/Gemini LLM integration.
+- Implemented production-readiness features including request latency and token tracking, LRU caching, input validation, prompt-injection screening and automated testing using Pytest.
 
-Checkpoint 2 introduces the interactive Streamlit frontend connected to the FastAPI backend.
-
-### Implemented Features
-
-- Conversational AQI question answering.
-- RAG-based document retrieval through `/ask`.
-- LangGraph agent workflow through `/agent`.
-- AQI calculator with human approval.
-- Source citations displayed with answers.
-- Conversation history using Streamlit session state.
-- Thumbs-up and thumbs-down feedback.
-- Local feedback storage in JSONL format.
-- Six-band CPCB AQI colour indicator.
-- CPCB category-based health-impact statements.
-
-### Demo Screenshot
-
-![AQIExplainer Checkpoint 2](docs/checkpoint-2.png)
-
-## 15. Future Enhancements
+## 17. Future Enhancements
 
 - Improve semantic retrieval accuracy and relevance evaluation.
 - Introduce stronger answer-quality evaluation beyond keyword matching.
@@ -804,10 +1067,11 @@ Checkpoint 2 introduces the interactive Streamlit frontend connected to the Fast
 - Expand AQI coverage to more cities and locations.
 - Add interactive AQI trend visualizations.
 - Add more AQI-related datasets and document sources.
+- Improve production monitoring and performance benchmarking.
 
-## 16. Learning Outcomes
+## 18. Learning Outcomes
 
-During this 10-day development journey, the project involved practical implementation and understanding of:
+During this development journey, the project involved practical implementation and understanding of:
 
 - Python programming and modular development.
 - Data collection, cleaning and preprocessing.
@@ -827,10 +1091,25 @@ During this 10-day development journey, the project involved practical implement
 - Precision@K, Recall@K and MRR.
 - Streamlit conversational application development.
 - Session state and feedback collection.
+- Pytest and API testing.
+- Mocking LLM responses.
+- Ruff code quality checks.
+- Input validation and prompt-injection screening.
+- LRU caching and TTL expiration.
+- Request latency and token monitoring.
 - Git and GitHub version control.
 
-## 17. Author
+## 19. Project Demonstration
 
-**Name:** Vedika
+**Demo Video:** ADD_YOUR_DEMO_VIDEO_URL
+
+**Demo Screenshot:**
+
+![AQIExplainer Checkpoint 2](docs/checkpoint-2.png)
+
+## 20. Author
+
+**Name:** Vedika Taji
 **Project:** AQIExplainer
-**GitHub Repository:** [Gen-AI-Examate](https://github.com/VedikaTaji/Gen-AI-Examate)
+**Repository:** [Gen-AI-Examate](https://github.com/VedikaTaji/Gen-AI-Examate)
+**Live Backend :** https://aqiexplainer.onrender.com

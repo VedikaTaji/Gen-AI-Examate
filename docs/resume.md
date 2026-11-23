@@ -1,0 +1,3 @@
+- Developed a Python/FastAPI AQI question-answering API combining TF-IDF search, ChromaDB retrieval, and Groq/Gemini LLM integrations to return grounded explanations and citations.
+- Built a Streamlit conversational interface and LangGraph workflow for CPCB pollutant sub-index calculations, human approval, source citations, and AQI category health-impact context.
+- Implemented request-ID, latency, and token-usage logging, a 15-minute TTL response cache, 500-character validation, and prompt-injection regression tests; verified 41 tests passed and 50 of 50 repeated cache requests hit in a mocked local harness.
