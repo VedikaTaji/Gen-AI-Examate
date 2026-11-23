@@ -1,3 +1,5 @@
+![CI](https://github.com/VedikaTaji/Gen-AI-Examate/actions/workflows/ci.yml/badge.svg?branch=main)
+
 # AQIExplainer
 
 ## 1. Project Overview
