@@ -73,8 +73,13 @@ def call_groq(system_prompt, user_prompt):
         ],
         "response_format": {"type": "json_object"},
         "temperature": 0.2,
-        "max_completion_tokens": 500,
+        "max_completion_tokens": 2000,
     }
+
+    # gpt-oss models "think" before answering; keep that short so the
+    # token budget is left for the actual JSON answer.
+    if "gpt-oss" in model:
+        payload["reasoning_effort"] = "low"
 
     response = requests.post(url, headers=headers, json=payload, timeout=45)
 
