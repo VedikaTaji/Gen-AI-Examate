@@ -1,11 +1,14 @@
+import json
 from unittest.mock import patch
 
 import pytest
 
+from app import guardrails
 from app.guardrails import (
     MAX_QUESTION_CHARS,
     InputRejected,
     TTLCache,
+    answer_cache,
     validate_question,
 )
 
@@ -66,6 +69,14 @@ def test_second_identical_request_is_cache_hit(client):
     assert first.json() == second.json()
     assert mock_rag.call_count == 1
 
+
+def test_failed_generation_is_not_cached(client):
+    with patch("app.main.answer_with_rag", side_effect=RuntimeError("provider down")):
+        response = client.post("/ask", json={"question": "What is AQI?"})
+
+    assert response.status_code == 500
+    assert answer_cache.stats()["size"] == 0
+
 def test_cache_expires():
     cache = TTLCache(ttl_seconds=0)
     cache.set("k", 1)
@@ -80,3 +91,36 @@ def test_cache_evicts_oldest():
 
 def test_metrics_endpoint(client):
     assert "cache" in client.get("/metrics").json()
+
+def test_request_metrics_are_logged(tmp_path, monkeypatch):
+    metrics_file = tmp_path / "requests.jsonl"
+
+    monkeypatch.setattr(
+        guardrails,
+        "METRICS_FILE",
+        metrics_file
+    )
+
+    guardrails.log_request(
+        endpoint="/ask",
+        latency_ms=125.5,
+        tokens_in=200,
+        tokens_out=100,
+        cache_hit=False,
+        status=200,
+        request_id="test-request-id",
+    )
+
+    data = json.loads(
+        metrics_file.read_text(encoding="utf-8")
+    )
+
+    assert data["endpoint"] == "/ask"
+    assert data["latency_ms"] == 125.5
+    assert data["tokens_in"] == 200
+    assert data["tokens_out"] == 100
+    assert data["total_tokens"] == 300
+    assert data["cache_hit"] is False
+    assert data["request_id"] == "test-request-id"
+    assert data["status_code"] == 200
+    assert data["status"] == 200
