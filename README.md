@@ -1038,15 +1038,21 @@ When provider token usage is unavailable, the application uses an approximate to
 
 ### Performance Results
 
-Update this table after running actual measurements.
+Measurements from 5 successful cache-miss requests and 5 repeated cache-hit requests using the local AQIExplainer API.
 
-| Metric | Measured Value |
-|---|---|
-| First request latency | Pending measurement |
-| Cached request latency | Pending measurement |
-| Cache hit rate | Pending measurement |
-| Average input tokens | Pending measurement |
-| Average output tokens | Pending measurement |
+| Metric | Measured Result |
+|---|---:|
+| Average response latency (cache miss) | 2,251.72 ms |
+| Average response latency (cache hit) | 3.46 ms |
+| Average input tokens per cache miss | 1,448.2 |
+| Average output tokens per cache miss | 91.2 |
+| Average total tokens per cache miss | 1,539.4 |
+| Cache hit rate (second pass) | 100% |
+| Requests in second pass | 5 |
+
+**Observation:** Repeated requests were served from the response cache, reducing average measured latency from approximately 2.25 seconds to 3.46 milliseconds. Cached responses did not require additional LLM token usage.
+
+*Note: These are local test measurements, not production benchmarks. Results may vary depending on model response time, hardware, network conditions, and cache state.*
 
 ## 16. Resume Description
 
@@ -1115,3 +1121,4 @@ During this development journey, the project involved practical implementation a
 **Project:** AQIExplainer
 **Repository:** [Gen-AI-Examate](https://github.com/VedikaTaji/Gen-AI-Examate)
 **Live Backend :** https://aqiexplainer.onrender.com
+**video url : ** https://youtu.be/WE9UVh3F3rc?si=s-bgn86LL3OQOw7m
